@@ -2,6 +2,7 @@ from typing import List
 from sqlalchemy.orm import Session
 from .schemas import RSSChannelResponse, RSSChannelCreate, RSSChannelUpdate
 from ...core.common_service import CommonService
+from app.db.models import RSSChannel
 
 
 class RSSChannelService(CommonService):
@@ -14,12 +15,16 @@ class RSSChannelService(CommonService):
     ) -> List[RSSChannelResponse]:
         pass
 
-    def create_source_channel(
-        self,
-        source_id: int,
-        payload: RSSChannelCreate,
-    ) -> RSSChannelResponse:
-        pass
+    def create_source_channel(self, source_id: int, payload: RSSChannelCreate) -> RSSChannelResponse:
+        new_channel = RSSChannel(
+            information_source_id=source_id,
+            category_id=payload.category_id,
+            url=str(payload.url)
+        )
+        self.db.add(new_channel)
+        self.db.commit()
+        self.db.refresh(new_channel)
+        return new_channel
 
     def get_source_channel(
         self,

@@ -48,14 +48,16 @@ class Descriptor(Base):
 class AlertCategoryItem(Base):
     __tablename__ = "alert_category_item"
 
-    code = Column(String(60), primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement="auto")
+    code = Column(String(60), nullable=False)
     label = Column(String(120), nullable=False)
 
 
 class Metric(Base):
     __tablename__ = "metric"
 
-    name = Column(String(100), primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement="auto")
+    name = Column(String(100), nullable=False)
     value = Column(Float, nullable=False)
 
 
