@@ -20,3 +20,10 @@ IMPORTANTE: el código de `db` posiblemente tenga cosas mal en ambos archivos.
     - `router.py`: Endpoints. Se limitan a llamar a service
     - `schemas.py`: modelos de pydantic
     - `service.py`: Clase que hereda de CommonService con métodos (1 por cada endpoint de router.py) a rellenar para seguir el mismo comportamiento del API REST original pero esta vez haciendo queries a nuestra BBDD (usando la librería SQLAlchemy o cualquier otro ORM que queráis) en vez de diccionarios de python
+
+### Consideraciones importantes respecto al DOCKER
+
+- Cada miembro del equipo debe ejecutar `docker compose up --build` en su propio entorno al menos una vez para construir la imagen
+- El build de Docker es local, no se comparte entre usuarios
+- El backend se ejecuta en `http://localhost:8000` en cada máquina individual
+- Si se realizan cambios en el Dockerfile o en `requirements.txt`, es necesario volver a ejecutar el comando con `--build`
