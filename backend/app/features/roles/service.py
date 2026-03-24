@@ -5,7 +5,7 @@ from .schemas import RoleResponse, RoleCreate, RoleUpdate
 from ...core.common_service import CommonService
 from ...db.models import Role, CrossRoleUser
 
-
+# Service para manejar roles de usuario. Permite listar, crear, obtener, actualizar y eliminar roles.
 class RolesService(CommonService):
     def __init__(self, db: Session):
         super().__init__(db)
