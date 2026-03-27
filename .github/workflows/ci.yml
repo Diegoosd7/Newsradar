@@ -48,7 +48,7 @@ jobs:
       - name: Run tests
         run: |
           docker-compose -f docker-compose.yml up -d  # Levanta el contenedor
-          docker-compose -f docker-compose.yml exec -T backend pytest # Ejecuta las pruebas dentro del contenedor
+          docker-compose -f docker-compose.yml exec -T backend pytest tests 
           docker-compose down  # Detiene los contenedores después de las pruebas
 
       # Paso 7: Desplegar en producción (si es necesario)
