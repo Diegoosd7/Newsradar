@@ -3,14 +3,14 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main 
+      - main  
   pull_request:
     branches:
       - main
 
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest  # El entorno donde se ejecutará el pipeline
 
     steps:
       # Paso 1: Checkout del código
@@ -21,7 +21,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # Paso 3: Instalar dependencias de Python
+      # Paso 3: Instalar Docker Compose
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version  # Verifica que Docker Compose se haya instalado correctamente
+
+      # Paso 4: Instalar dependencias de Python
       - name: Set up Python 3.11
         uses: actions/setup-python@v2
         with:
@@ -32,19 +39,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt  # Asegúrate de que esté bien ubicado
 
-      # Paso 4: Construir Docker image
+      # Paso 5: Construir Docker image
       - name: Build Docker image
         run: |
           docker-compose -f docker-compose.yml build
 
-      # Paso 5: Ejecutar pruebas
+      # Paso 6: Ejecutar pruebas
       - name: Run tests
         run: |
           docker-compose -f docker-compose.yml up -d  # Levanta el contenedor
           docker-compose -f docker-compose.yml exec backend pytest  # Ejecuta las pruebas dentro del contenedor
           docker-compose down  # Detiene los contenedores después de las pruebas
 
-      # Paso 6: Desplegar en producción (si es necesario)
+      # Paso 7: Desplegar en producción (si es necesario)
       - name: Deploy to production
         if: github.ref == 'refs/heads/main'  # Solo en la rama principal
         run: |
