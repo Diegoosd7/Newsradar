@@ -1,3 +1,8 @@
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -32,9 +37,7 @@ class FakeAlertsService:
                 "user_id": user_id,
                 "name": "AI News",
                 "descriptors": ["ai", "machine learning"],
-                "categories": [
-                    {"code": "tech", "label": "Technology"}
-                ],
+                "categories": [{"code": "tech", "label": "Technology"}],
                 "cron_expression": "0 * * * *",
             }
         ]
@@ -55,9 +58,7 @@ class FakeAlertsService:
             "user_id": user_id,
             "name": "Cybersecurity Alert",
             "descriptors": ["cyber", "security"],
-            "categories": [
-                {"code": "security", "label": "Security"}
-            ],
+            "categories": [{"code": "security", "label": "Security"}],
             "cron_expression": "*/15 * * * *",
         }
 
@@ -162,9 +163,7 @@ def test_create_user_alert():
     payload = {
         "name": "Tech Alert",
         "descriptors": ["ai", "robotics"],
-        "categories": [
-            {"code": "tech", "label": "Technology"}
-        ],
+        "categories": [{"code": "tech", "label": "Technology"}],
         "cron_expression": "0 * * * *",
     }
 
@@ -194,9 +193,7 @@ def test_update_user_alert():
     payload = {
         "name": "Updated Tech Alert",
         "descriptors": ["cloud", "devops"],
-        "categories": [
-            {"code": "it", "label": "IT"}
-        ],
+        "categories": [{"code": "it", "label": "IT"}],
         "cron_expression": "*/30 * * * *",
     }
 
