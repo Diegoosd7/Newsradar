@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
-from .schemas import AlertResponse, AlertCreate, AlertUpdate
+from .schemas import AlertResponse, AlertCreate, AlertUpdate, KeywordSuggestionRequest, KeywordSuggestionResponse
 from .service import AlertsService
 from ...db.database import get_db
 from ...core.security import get_current_user
@@ -85,3 +85,17 @@ def delete_user_alert(
     service: AlertsService = Depends(get_alerts_service),
 ) -> None:
     service.delete_user_alert(user_id, alert_id)
+
+@router.post(
+    "/suggest-keywords",
+    response_model=KeywordSuggestionResponse,
+    tags=["alerts", "ai"],
+    summary="Sugiere entre 3 y 10 palabras relacionadas usando IA"
+)
+def suggest_alert_keywords(
+    payload: KeywordSuggestionRequest,
+    _: UserInDB = Depends(get_current_user),
+    service: AlertsService = Depends(get_alerts_service),
+) -> KeywordSuggestionResponse:
+    suggestions = service.suggest_keywords_with_ai(payload.keyword)
+    return KeywordSuggestionResponse(suggestions=suggestions)
