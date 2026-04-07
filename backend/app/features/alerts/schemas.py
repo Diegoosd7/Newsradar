@@ -28,3 +28,11 @@ class AlertUpdate(BaseModel):
 class AlertResponse(AlertBase):
     id: int
     user_id: int
+
+
+class KeywordSuggestionRequest(BaseModel):
+    keyword: str = Field(..., min_length=1, max_length=100, description="Palabra clave original")
+
+
+class KeywordSuggestionResponse(BaseModel):
+    suggestions: List[str] = Field(..., description="Lista de 3 a 10 sinónimos o palabras relacionadas")

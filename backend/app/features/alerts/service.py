@@ -1,3 +1,6 @@
+import os
+import json
+import google.generativeai as genai
 from typing import List
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
@@ -18,13 +21,58 @@ class AlertsService(CommonService):
     def __init__(self, db: Session):
         super().__init__(db)
 
+    def suggest_keywords_with_ai(self, keyword: str) -> List[str]:
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise HTTPException(status_code=500, detail="Falta la API Key de Gemini en el entorno.")
+
+        try:
+            genai.configure(api_key=api_key)
+            
+            # 1. Buscar en Google qué modelos tiene disponibles y soportan generación de texto
+            valid_model_name = None
+            for m in genai.list_models():
+                if 'generateContent' in m.supported_generation_methods:
+                    valid_model_name = m.name
+                    break
+            
+            if not valid_model_name:
+                raise HTTPException(status_code=500, detail="Tu cuenta de Google no tiene acceso a ningún modelo de texto.")
+
+            # 2. Usar el modelo
+            model = genai.GenerativeModel(valid_model_name) 
+            
+            prompt = f"""
+            Actúa como un experto lingüista. Para la palabra clave '{keyword}', 
+            proporciona entre 3 y 10 sinónimos o palabras estrechamente relacionadas.
+            Devuelve ÚNICAMENTE un array en formato JSON con las palabras, sin texto adicional ni formato markdown.
+            Ejemplo: ["palabra1", "palabra2", "palabra3"]
+            """
+            
+            response = model.generate_content(prompt)
+            
+            # Limpiamos la respuesta por si la IA mete etiquetas Markdown
+            cleaned_text = response.text.replace("```json", "").replace("```", "").strip()
+            suggestions = json.loads(cleaned_text)
+            
+            # Aseguramos que devuelva un máximo de 10
+            return suggestions[:10]
+            
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error comunicándose con la IA: {str(e)}")
+
     def list_user_alerts(self, user_id: int) -> List[AlertResponse]:
         self._ensure_user_exists(user_id)
         alerts = self.db.query(Alert).filter(Alert.user_id == user_id).all()
         return [self._to_response(alert) for alert in alerts]
 
     def create_user_alert(self, user_id: int, payload: AlertCreate) -> AlertResponse:
-        self._ensure_user_exists(user_id)
+        user = self._ensure_user_exists(user_id)
+
+        # Límite de 20 alertas
+        alert_count = self.db.query(Alert).filter(Alert.user_id == user_id).count()
+        if alert_count >= 20:
+            raise HTTPException(status_code=400, detail="Límite máximo de 20 alertas alcanzado para este usuario.")
 
         alert = Alert(
             user_id=user_id,
@@ -88,10 +136,11 @@ class AlertsService(CommonService):
         self.db.query(Alert).filter(Alert.id == alert_id).delete(synchronize_session=False)
         self.db.commit()
 
-    def _ensure_user_exists(self, user_id: int) -> None:
-        user = self.db.query(User).filter(User.id == user_id).first()
-        if user is None:
-            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    def _ensure_user_exists(self, user_id: int) -> User:
+            user = self.db.query(User).filter(User.id == user_id).first()
+            if user is None:
+                raise HTTPException(status_code=404, detail="Usuario no encontrado")
+            return user
 
     def _get_alert_for_user_or_404(self, user_id: int, alert_id: int) -> Alert:
         self._ensure_user_exists(user_id)

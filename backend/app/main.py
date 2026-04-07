@@ -1,4 +1,5 @@
 from fastapi import FastAPI, APIRouter
+from dotenv import load_dotenv
 
 from app.features.alerts.router import router as alerts_router
 from app.features.auth.router import router as auth_router
@@ -10,6 +11,9 @@ from app.features.rss_channels.router import router as rss_channels_router
 from app.features.stats.router import router as stats_router
 from app.features.system.router import router as system_router
 from app.features.users.router import router as users_router
+
+# Carga las variables del archivo .env
+load_dotenv()
 
 API_PREFIX = "/api/v1"
 
