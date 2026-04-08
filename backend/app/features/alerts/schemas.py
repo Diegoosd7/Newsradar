@@ -3,15 +3,15 @@ from pydantic import BaseModel, Field
 
 
 class AlertCategoryItem(BaseModel):
-    code: str = Field(..., min_length=1, max_length=60)
-    label: str = Field(..., min_length=1, max_length=120)
+    code: str = Field(..., min_length=1, max_length=60, example="04000000")
+    label: str = Field(..., min_length=1, max_length=120, example="Economía, negocios y finanzas")
 
 
 class AlertBase(BaseModel):
-    name: str = Field(..., min_length=1, max_length=200)
-    descriptors: List[str] = Field(default_factory=list)
+    name: str = Field(..., min_length=1, max_length=200, example="Alerta economía")
+    descriptors: List[str] = Field(default_factory=list, example=["economía", "inflación", "PIB"])
     categories: List[AlertCategoryItem] = Field(default_factory=list)
-    cron_expression: str = Field(..., min_length=1, max_length=120)
+    cron_expression: str = Field(..., min_length=1, max_length=120, example="* * * * *")
 
 
 class AlertCreate(AlertBase):
