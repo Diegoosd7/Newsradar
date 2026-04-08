@@ -6,6 +6,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from .schemas import AlertResponse, AlertCreate, AlertUpdate
 from ...core.common_service import CommonService
+from ...core.scheduler import register_alert_job, update_alert_job, remove_alert_job
 from ...db.models import (
     User,
     Alert,
@@ -28,36 +29,30 @@ class AlertsService(CommonService):
 
         try:
             genai.configure(api_key=api_key)
-            
-            # 1. Buscar en Google qué modelos tiene disponibles y soportan generación de texto
+
             valid_model_name = None
             for m in genai.list_models():
                 if 'generateContent' in m.supported_generation_methods:
                     valid_model_name = m.name
                     break
-            
+
             if not valid_model_name:
                 raise HTTPException(status_code=500, detail="Tu cuenta de Google no tiene acceso a ningún modelo de texto.")
 
-            # 2. Usar el modelo
-            model = genai.GenerativeModel(valid_model_name) 
-            
+            model = genai.GenerativeModel(valid_model_name)
+
             prompt = f"""
-            Actúa como un experto lingüista. Para la palabra clave '{keyword}', 
+            Actúa como un experto lingüista. Para la palabra clave '{keyword}',
             proporciona entre 3 y 10 sinónimos o palabras estrechamente relacionadas.
             Devuelve ÚNICAMENTE un array en formato JSON con las palabras, sin texto adicional ni formato markdown.
             Ejemplo: ["palabra1", "palabra2", "palabra3"]
             """
-            
+
             response = model.generate_content(prompt)
-            
-            # Limpiamos la respuesta por si la IA mete etiquetas Markdown
             cleaned_text = response.text.replace("```json", "").replace("```", "").strip()
             suggestions = json.loads(cleaned_text)
-            
-            # Aseguramos que devuelva un máximo de 10
             return suggestions[:10]
-            
+
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error comunicándose con la IA: {str(e)}")
 
@@ -67,12 +62,14 @@ class AlertsService(CommonService):
         return [self._to_response(alert) for alert in alerts]
 
     def create_user_alert(self, user_id: int, payload: AlertCreate) -> AlertResponse:
-        user = self._ensure_user_exists(user_id)
+        self._ensure_user_exists(user_id)
 
-        # Límite de 20 alertas
         alert_count = self.db.query(Alert).filter(Alert.user_id == user_id).count()
         if alert_count >= 20:
-            raise HTTPException(status_code=400, detail="Límite máximo de 20 alertas alcanzado para este usuario.")
+            raise HTTPException(
+                status_code=400,
+                detail="Límite máximo de 20 alertas alcanzado para este usuario.",
+            )
 
         alert = Alert(
             user_id=user_id,
@@ -87,6 +84,11 @@ class AlertsService(CommonService):
 
         self.db.commit()
         self.db.refresh(alert)
+
+        # Registrar el job en el scheduler DESPUÉS del commit, para que
+        # si el commit falla el job no quede huérfano.
+        register_alert_job(alert.id, alert.cron_expression)
+
         return self._to_response(alert)
 
     def get_user_alert(self, user_id: int, alert_id: int) -> AlertResponse:
@@ -113,34 +115,44 @@ class AlertsService(CommonService):
 
         self.db.commit()
         self.db.refresh(alert)
+
+        # Actualizar el job si cambió la expresión cron.
+        if "cron_expression" in data:
+            update_alert_job(alert.id, alert.cron_expression)
+
         return self._to_response(alert)
 
     def delete_user_alert(self, user_id, alert_id) -> None:
         self._get_alert_for_user_or_404(user_id, alert_id)
 
-        (
-            self.db.query(Notification)
-            .filter(Notification.alert_id == alert_id)
-            .delete(synchronize_session=False)
+        # Eliminar el job ANTES del commit — si el commit falla después,
+        # el job puede re-registrarse en el próximo startup desde BD.
+        # Si eliminamos después del commit y falla la eliminación del job,
+        # queda un job huérfano que el monitor manejará devolviendo sin hacer nada.
+        remove_alert_job(alert_id)
+
+        self.db.query(Notification).filter(
+            Notification.alert_id == alert_id
+        ).delete(synchronize_session=False)
+
+        self.db.query(CrossAlertDescriptor).filter(
+            CrossAlertDescriptor.alert_id == alert_id
+        ).delete(synchronize_session=False)
+
+        self.db.query(CrossAlertAlertCategoryItem).filter(
+            CrossAlertAlertCategoryItem.alert_id == alert_id
+        ).delete(synchronize_session=False)
+
+        self.db.query(Alert).filter(Alert.id == alert_id).delete(
+            synchronize_session=False
         )
-        (
-            self.db.query(CrossAlertDescriptor)
-            .filter(CrossAlertDescriptor.alert_id == alert_id)
-            .delete(synchronize_session=False)
-        )
-        (
-            self.db.query(CrossAlertAlertCategoryItem)
-            .filter(CrossAlertAlertCategoryItem.alert_id == alert_id)
-            .delete(synchronize_session=False)
-        )
-        self.db.query(Alert).filter(Alert.id == alert_id).delete(synchronize_session=False)
         self.db.commit()
 
     def _ensure_user_exists(self, user_id: int) -> User:
-            user = self.db.query(User).filter(User.id == user_id).first()
-            if user is None:
-                raise HTTPException(status_code=404, detail="Usuario no encontrado")
-            return user
+        user = self.db.query(User).filter(User.id == user_id).first()
+        if user is None:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        return user
 
     def _get_alert_for_user_or_404(self, user_id: int, alert_id: int) -> Alert:
         self._ensure_user_exists(user_id)
@@ -150,15 +162,15 @@ class AlertsService(CommonService):
             .first()
         )
         if alert is None:
-            raise HTTPException(status_code=404, detail="Alerta no encontrada para el usuario")
+            raise HTTPException(
+                status_code=404, detail="Alerta no encontrada para el usuario"
+            )
         return alert
 
     def _replace_descriptors(self, alert_id: int, descriptors: List[str]) -> None:
-        (
-            self.db.query(CrossAlertDescriptor)
-            .filter(CrossAlertDescriptor.alert_id == alert_id)
-            .delete(synchronize_session=False)
-        )
+        self.db.query(CrossAlertDescriptor).filter(
+            CrossAlertDescriptor.alert_id == alert_id
+        ).delete(synchronize_session=False)
 
         for descriptor_name in descriptors:
             descriptor = (
@@ -176,11 +188,9 @@ class AlertsService(CommonService):
             )
 
     def _replace_categories(self, alert_id: int, categories: List[dict]) -> None:
-        (
-            self.db.query(CrossAlertAlertCategoryItem)
-            .filter(CrossAlertAlertCategoryItem.alert_id == alert_id)
-            .delete(synchronize_session=False)
-        )
+        self.db.query(CrossAlertAlertCategoryItem).filter(
+            CrossAlertAlertCategoryItem.alert_id == alert_id
+        ).delete(synchronize_session=False)
 
         for category in categories:
             category_item = (
@@ -192,7 +202,9 @@ class AlertsService(CommonService):
                 .first()
             )
             if category_item is None:
-                category_item = AlertCategoryItem(code=category.code, label=category.label)
+                category_item = AlertCategoryItem(
+                    code=category.code, label=category.label
+                )
                 self.db.add(category_item)
                 self.db.flush()
 
@@ -208,7 +220,10 @@ class AlertsService(CommonService):
             name
             for (name,) in (
                 self.db.query(Descriptor.name)
-                .join(CrossAlertDescriptor, CrossAlertDescriptor.descriptor_id == Descriptor.id)
+                .join(
+                    CrossAlertDescriptor,
+                    CrossAlertDescriptor.descriptor_id == Descriptor.id,
+                )
                 .filter(CrossAlertDescriptor.alert_id == alert.id)
                 .all()
             )

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Text, Boolean, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -83,12 +83,70 @@ class Alert(Base):
     cron_expression = Column(String(120), nullable=False)
 
 
+# ---------------------------------------------------------------------------
+# NewsItem — registro de cada noticia procesada por el motor de monitorización.
+#
+# Por qué existe esta tabla:
+#   El mismo artículo puede aparecer en un feed RSS durante días. Sin esta
+#   tabla, cada ejecución del cron volvería a detectarlo y generaría
+#   notificaciones duplicadas. La URL del artículo es el identificador
+#   natural y único de una noticia en la web.
+#
+# Campos:
+#   url         — URL canónica del artículo. Clave de deduplicación.
+#   title       — Título extraído del campo <title> del item RSS.
+#   summary     — Resumen extraído del campo <summary> o <description>.
+#   published   — Fecha de publicación según el feed (puede ser None si
+#                 el feed no la incluye).
+#   channel_id  — Canal RSS del que proviene, para trazabilidad.
+#   created_at  — Momento en que nuestro sistema lo procesó por primera vez.
+# ---------------------------------------------------------------------------
+class NewsItem(Base):
+    __tablename__ = "news_item"
+
+    id = Column(Integer, primary_key=True, autoincrement="auto")
+    url = Column(String(2048), nullable=False, unique=True)
+    title = Column(String(500), nullable=False)
+    summary = Column(Text, nullable=True)
+    published = Column(DateTime, nullable=True)
+    channel_id = Column(Integer, ForeignKey("rss_channel.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime, nullable=False)
+
+
+# ---------------------------------------------------------------------------
+# Notification — notificación generada cuando una noticia coincide con una
+# alerta activa.
+#
+# Cambios respecto al modelo original:
+#   Se añaden news_item_id, matched_descriptor y is_read.
+#
+#   news_item_id      — Referencia a la noticia que disparó la notificación.
+#                       Permite al frontend mostrar el título, URL y resumen
+#                       sin duplicar datos.
+#   matched_descriptor — El descriptor concreto (palabra clave) que causó
+#                        el match. Útil para el asunto del email:
+#                        "Actualización de <alerta> en <día/hora>".
+#   is_read           — Indica si el usuario ya leyó la notificación en
+#                       el buzón de la aplicación. Necesario para el panel
+#                       (Sprint 3).
+#
+# La restricción UniqueConstraint (alert_id, news_item_id) garantiza que
+# una misma noticia no genere dos notificaciones para la misma alerta,
+# incluso si dos descriptores de esa alerta hacen match con el mismo artículo.
+# ---------------------------------------------------------------------------
 class Notification(Base):
     __tablename__ = "notification"
 
     id = Column(Integer, primary_key=True, autoincrement="auto")
     alert_id = Column(Integer, ForeignKey("alert.id", ondelete="CASCADE"))
+    news_item_id = Column(Integer, ForeignKey("news_item.id", ondelete="CASCADE"), nullable=True)
     timestamp = Column(DateTime, nullable=False)
+    matched_descriptor = Column(String(255), nullable=True)
+    is_read = Column(Boolean, default=False, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("alert_id", "news_item_id", name="uq_notification_alert_news"),
+    )
 
 
 class RSSChannel(Base):
