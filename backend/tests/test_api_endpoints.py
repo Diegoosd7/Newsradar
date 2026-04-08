@@ -134,6 +134,20 @@ def test_register_user():
     assert data["role_ids"] == payload["role_ids"]
 
 
+def test_register_user_missing_required_field():
+    payload = {
+        "email": "newuser@example.com",
+        "first_name": "Pablo",
+        "last_name": "Garcia",
+        "organization": "UC3M",
+        "role_ids": [1],
+        # falta password
+    }
+
+    response = client.post("/api/v1/auth/register", json=payload)
+    assert response.status_code == 422
+
+
 def test_login_user():
     payload = {
         "email": "newuser@example.com",
@@ -148,6 +162,15 @@ def test_login_user():
     assert data["token_type"] == "bearer"
 
 
+def test_login_user_missing_password():
+    payload = {
+        "email": "newuser@example.com",
+    }
+
+    response = client.post("/api/v1/auth/login", json=payload)
+    assert response.status_code == 422
+
+
 def test_list_user_alerts():
     response = client.get("/api/v1/users/1/alerts")
     assert response.status_code == 200
@@ -157,6 +180,11 @@ def test_list_user_alerts():
     assert len(data) == 1
     assert data[0]["user_id"] == 1
     assert data[0]["name"] == "AI News"
+
+
+def test_list_user_alerts_invalid_user_id():
+    response = client.get("/api/v1/users/invalid/alerts")
+    assert response.status_code == 422
 
 
 def test_create_user_alert():
@@ -179,6 +207,40 @@ def test_create_user_alert():
     assert data["cron_expression"] == payload["cron_expression"]
 
 
+def test_create_user_alert_missing_name():
+    payload = {
+        "descriptors": ["ai", "robotics"],
+        "categories": [{"code": "tech", "label": "Technology"}],
+        "cron_expression": "0 * * * *",
+    }
+
+    response = client.post("/api/v1/users/1/alerts", json=payload)
+    assert response.status_code == 422
+
+
+def test_create_user_alert_missing_descriptors():
+    payload = {
+        "name": "Tech Alert",
+        "categories": [{"code": "tech", "label": "Technology"}],
+        "cron_expression": "0 * * * *",
+    }
+
+    response = client.post("/api/v1/users/1/alerts", json=payload)
+    assert response.status_code == 422
+
+
+def test_create_user_alert_invalid_user_id():
+    payload = {
+        "name": "Tech Alert",
+        "descriptors": ["ai", "robotics"],
+        "categories": [{"code": "tech", "label": "Technology"}],
+        "cron_expression": "0 * * * *",
+    }
+
+    response = client.post("/api/v1/users/invalid/alerts", json=payload)
+    assert response.status_code == 422
+
+
 def test_get_user_alert():
     response = client.get("/api/v1/users/1/alerts/7")
     assert response.status_code == 200
@@ -187,6 +249,11 @@ def test_get_user_alert():
     assert data["id"] == 7
     assert data["user_id"] == 1
     assert data["name"] == "Cybersecurity Alert"
+
+
+def test_get_user_alert_invalid_alert_id():
+    response = client.get("/api/v1/users/1/alerts/invalid")
+    assert response.status_code == 422
 
 
 def test_update_user_alert():
@@ -209,7 +276,35 @@ def test_update_user_alert():
     assert data["cron_expression"] == payload["cron_expression"]
 
 
+def test_update_user_alert_partial_payload():
+    payload = {
+        "name": "Partially Updated Alert",
+    }
+
+    response = client.put("/api/v1/users/1/alerts/7", json=payload)
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["id"] == 7
+    assert data["user_id"] == 1
+    assert data["name"] == "Partially Updated Alert"
+
+
+def test_update_user_alert_invalid_alert_id():
+    payload = {
+        "name": "Updated Tech Alert",
+    }
+
+    response = client.put("/api/v1/users/1/alerts/invalid", json=payload)
+    assert response.status_code == 422
+
+
 def test_delete_user_alert():
     response = client.delete("/api/v1/users/1/alerts/7")
     assert response.status_code == 204
     assert response.text == ""
+
+
+def test_delete_user_alert_invalid_alert_id():
+    response = client.delete("/api/v1/users/1/alerts/invalid")
+    assert response.status_code == 422
