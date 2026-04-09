@@ -5,7 +5,7 @@ oficiales mediante canales RSS. Permite definir alertas sobre palabras clave,
 clasificar noticias por categorías IPTC y enviar notificaciones a los usuarios.
 
 **Universidad Carlos III de Madrid — Desarrollo y Operación de Sistemas Software**  
-**Grado en Ingeniería Informática — Curso 2025/2026**
+**Grado en Ingeniería Informática — Curso 2026**
 
 ---
 
