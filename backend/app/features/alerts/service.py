@@ -50,7 +50,40 @@ class AlertsService(CommonService):
 
             response = model.generate_content(prompt)
             cleaned_text = response.text.replace("```json", "").replace("```", "").strip()
-            suggestions = json.loads(cleaned_text)
+            try:
+                suggestions = json.loads(cleaned_text)
+            except json.JSONDecodeError:
+                # Fallback: intenta extraer el primer [...] del texto
+                start = cleaned_text.find("[")
+                end = cleaned_text.rfind("]")
+                if start != -1 and end != -1 and end > start:
+                    suggestions = json.loads(cleaned_text[start : end + 1])
+                else:
+                    raise HTTPException(status_code=500, detail="La IA no devolvió JSON válido.")
+
+            #Validación de tipo. Asegura que el JSON es una lista
+            if not isinstance(suggestions, list):
+                raise HTTPException(status_code=500, detail="La IA no devolvió una lista JSON.")
+
+            # Limpieza (str, strip, sin vacíos)
+            suggestions = [str(x).strip() for x in suggestions if str(x).strip()]
+
+            # Deduplicado manteniendo orden (case-insensitive)
+            seen = set()
+            deduped = []
+            for x in suggestions:
+                key = x.lower()
+                if key not in seen:
+                    seen.add(key)
+                    deduped.append(x)
+            suggestions = deduped
+
+            # Recortar a 10
+            suggestions = suggestions[:10]
+
+            # Garantizar mínimo 3
+            if len(suggestions) < 3:
+                raise HTTPException(status_code=500, detail="La IA devolvió menos de 3 sugerencias.")
             return suggestions[:10]
 
         except Exception as e:
