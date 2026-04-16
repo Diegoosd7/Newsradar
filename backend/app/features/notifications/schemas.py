@@ -21,3 +21,11 @@ class NotificationUpdate(BaseModel):
 class NotificationResponse(NotificationBase):
     id: int
     alert_id: int
+    news_item_id: Optional[int] = None
+    matched_descriptor: Optional[str] = None
+    is_read: bool = False
+    news_title: Optional[str] = None
+    news_summary: Optional[str] = None
+    news_url: Optional[str] = None
+    news_published: Optional[datetime] = None
+    source_name: Optional[str] = None

@@ -9,3 +9,7 @@ class TokenResponse(BaseModel):
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+
+
+class VerifyEmailResponse(BaseModel):
+    message: str

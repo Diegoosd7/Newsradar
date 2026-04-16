@@ -1,19 +1,38 @@
 from typing import List
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
+
 from .schemas import NotificationResponse, NotificationCreate, NotificationUpdate
 from ...core.common_service import CommonService
+from ...core.email_service import EmailService
 from ...db.models import (
     Alert,
     Notification,
     Metric,
     CrossMetricNotification,
+    NewsItem,
+    RSSChannel,
+    InformationSource,
+    User,
 )
 
 
 class NotificationsService(CommonService):
     def __init__(self, db: Session):
         super().__init__(db)
+        self.email_service = EmailService()
+
+    def list_user_notifications(self, user_id: int) -> List[NotificationResponse]:
+        self._ensure_user_exists(user_id)
+        notifications = (
+            self.db.query(Notification)
+            .join(Alert, Alert.id == Notification.alert_id)
+            .filter(Alert.user_id == user_id)
+            .order_by(Notification.timestamp.desc())
+            .all()
+        )
+        return [self._to_response(notification) for notification in notifications]
 
     def list_alert_notifications(
         self,
@@ -24,6 +43,7 @@ class NotificationsService(CommonService):
         notifications = (
             self.db.query(Notification)
             .filter(Notification.alert_id == alert_id)
+            .order_by(Notification.timestamp.desc())
             .all()
         )
         return [self._to_response(notification) for notification in notifications]
@@ -48,6 +68,59 @@ class NotificationsService(CommonService):
         self.db.commit()
         self.db.refresh(notification)
         return self._to_response(notification)
+
+    def create_and_dispatch_notification(
+        self,
+        alert: Alert,
+        user: User,
+        news_item: NewsItem,
+        matched_descriptor: str | None,
+        timestamp,
+    ) -> bool:
+        existing = (
+            self.db.query(Notification)
+            .filter(
+                Notification.alert_id == alert.id,
+                Notification.news_item_id == news_item.id,
+            )
+            .first()
+        )
+        if existing is not None:
+            return False
+
+        notification = Notification(
+            alert_id=alert.id,
+            news_item_id=news_item.id,
+            timestamp=timestamp,
+            matched_descriptor=matched_descriptor,
+            is_read=False,
+        )
+        self.db.add(notification)
+        self.db.flush()
+
+        published_or_timestamp = news_item.published or notification.timestamp
+        source_name = self._get_source_name(news_item)
+        news_datetime_text = published_or_timestamp.strftime("%d/%m/%Y %H:%M")
+
+        try:
+            self.email_service.send_alert_notification_email(
+                recipient_email=user.email,
+                alert_name=alert.name,
+                source_name=source_name,
+                news_datetime_text=news_datetime_text,
+                title=news_item.title,
+                summary=news_item.summary,
+            )
+        except Exception as exc:
+            self.db.rollback()
+            raise HTTPException(
+                status_code=500,
+                detail=f"No se pudo enviar la notificación por email: {exc}",
+            ) from exc
+
+        self.db.commit()
+        self.db.refresh(notification)
+        return True
 
     def get_alert_notification(
         self,
@@ -96,6 +169,24 @@ class NotificationsService(CommonService):
         self.db.delete(notification)
         self.db.commit()
 
+    def mark_notification_as_read(
+        self,
+        user_id: int,
+        notification_id: int,
+    ) -> NotificationResponse:
+        self._ensure_user_exists(user_id)
+        notification = self._get_user_notification_or_404(user_id, notification_id)
+        notification.is_read = True
+        self.db.commit()
+        self.db.refresh(notification)
+        return self._to_response(notification)
+
+    def _ensure_user_exists(self, user_id: int) -> User:
+        user = self.db.query(User).filter(User.id == user_id).first()
+        if user is None:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        return user
+
     def _get_alert_for_user_or_404(self, user_id: int, alert_id: int) -> Alert:
         alert = (
             self.db.query(Alert)
@@ -116,6 +207,17 @@ class NotificationsService(CommonService):
             raise HTTPException(status_code=404, detail="Notificación no encontrada para la alerta")
         return notification
 
+    def _get_user_notification_or_404(self, user_id: int, notification_id: int) -> Notification:
+        notification = (
+            self.db.query(Notification)
+            .join(Alert, Alert.id == Notification.alert_id)
+            .filter(Notification.id == notification_id, Alert.user_id == user_id)
+            .first()
+        )
+        if notification is None:
+            raise HTTPException(status_code=404, detail="Notificación no encontrada para el usuario")
+        return notification
+
     def _replace_metrics(self, notification_id: int, metrics: List[dict]) -> None:
         (
             self.db.query(CrossMetricNotification)
@@ -134,7 +236,26 @@ class NotificationsService(CommonService):
                 )
             )
 
+    def _get_source_name(self, news_item: NewsItem) -> str:
+        if news_item.channel_id is None:
+            return "Origen desconocido"
+
+        source_name = (
+            self.db.query(InformationSource.name)
+            .join(RSSChannel, RSSChannel.information_source_id == InformationSource.id)
+            .filter(RSSChannel.id == news_item.channel_id)
+            .scalar()
+        )
+        return source_name or "Origen desconocido"
+
     def _to_response(self, notification: Notification) -> NotificationResponse:
+        news_item = None
+        source_name = None
+        if notification.news_item_id is not None:
+            news_item = self.db.query(NewsItem).filter(NewsItem.id == notification.news_item_id).first()
+            if news_item is not None:
+                source_name = self._get_source_name(news_item)
+
         metrics = [
             {"name": name, "value": value}
             for name, value in (
@@ -152,4 +273,12 @@ class NotificationsService(CommonService):
             alert_id=notification.alert_id,
             timestamp=notification.timestamp,
             metrics=metrics,
+            news_item_id=notification.news_item_id,
+            matched_descriptor=notification.matched_descriptor,
+            is_read=notification.is_read,
+            news_title=news_item.title if news_item is not None else None,
+            news_summary=news_item.summary if news_item is not None else None,
+            news_url=news_item.url if news_item is not None else None,
+            news_published=news_item.published if news_item is not None else None,
+            source_name=source_name,
         )

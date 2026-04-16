@@ -15,6 +15,7 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     id: int
+    is_verified: bool = False
 
 
 class UserInDB(UserResponse):

@@ -13,6 +13,9 @@ class User(Base):
     first_name = Column(String(120))
     last_name = Column(String(120))
     organization = Column(String(180))
+    is_verified = Column(Boolean, nullable=False, default=False)
+    verification_token = Column(String(255), nullable=True, unique=True)
+    verification_token_expires_at = Column(DateTime, nullable=True)
 
 
 class Role(Base):
