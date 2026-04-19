@@ -1,0 +1,104 @@
+:root {
+	--black: rgb(2, 4, 32);
+	font-family:
+		"Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+	font-family: inherit;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+button {
+	cursor: pointer;
+	display: block;
+	text-decoration: none;
+	border: none;
+	background-color: transparent;
+	margin: 0;
+	padding: 0;
+}
+
+input,
+select {
+	font-size: 1rem;
+	padding: 0.5rem;
+	background-color: white;
+	border: 1px solid black;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+	font-weight: normal;
+	color: var(--black);
+}
+
+a {
+	text-decoration: none;
+	display: block;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+	color: var(--black);
+}
+
+/* Main layout */
+
+#app {
+	height: 100vh;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 10vh 90vh;
+}
+
+/* Utilities */
+
+.view {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.form-button {
+	width: 100%;
+	padding: 1rem;
+	background-color: var(--black);
+	color: white;
+	transition: 0.3s;
+}
+
+.form-button:hover {
+	color: rgb(141, 141, 141);
+}
+
+label {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	width: 100%;
+}
+
+input {
+	width: 100%;
+}
+
+.x-button {
+	padding: 1rem;
+	font-size: 1.5rem;
+}
+
+.x-button:hover {
+	color: rgb(203, 61, 61);
+}
