@@ -16,16 +16,16 @@
 			<NavItem link="/notificaciones" name="NOTIFICACIONES" />
 			<NavItem link="/cuenta" name="CUENTA" />
 		</div>
-		<RouterLink to="/" class="cerrar-sesion">CERRAR SESIÓN</RouterLink>
+		<button @click="emit('logout')" class="cerrar-sesion">CERRAR SESIÓN</button>
 	</div>
 </template>
 
 <script setup lang="ts">
 import NavItem from "./NavItem.vue";
-import { RouterLink } from "vue-router";
 
 type Props = { role: "LECTOR" | "GESTOR" };
 const props = defineProps<Props>();
+const emit = defineEmits<{ logout: [] }>();
 </script>
 
 <style scoped>

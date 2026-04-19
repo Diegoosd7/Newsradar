@@ -1,45 +1,41 @@
 <template>
 	<div class="view">
 		<div class="login-register-modal">
-			<div class="options">
-				<button
-					@click="changeToLogin"
-					:class="[
-						'option',
-						activeForm === 'LOGIN' ? 'option--active' : '',
-					]"
-				>
-					LOGIN
-				</button>
-				<button
-					@click="changeToRegister"
-					:class="[
-						'option',
-						activeForm === 'REGISTER' ? 'option--active' : '',
-					]"
-				>
-					REGISTRO
-				</button>
-			</div>
-			<LoginForm v-if="activeForm === 'LOGIN'" />
-			<RegisterForm v-else />
+			<template v-if="activeForm !== 'FORGOT_PASSWORD'">
+				<div class="options">
+					<button
+						@click="activeForm = 'LOGIN'"
+						:class="['option', activeForm === 'LOGIN' ? 'option--active' : '']"
+					>
+						LOGIN
+					</button>
+					<button
+						@click="activeForm = 'REGISTER'"
+						:class="['option', activeForm === 'REGISTER' ? 'option--active' : '']"
+					>
+						REGISTRO
+					</button>
+				</div>
+				<LoginForm v-if="activeForm === 'LOGIN'" @forgot-password="activeForm = 'FORGOT_PASSWORD'" />
+				<RegisterForm v-else />
+			</template>
+			<template v-else>
+				<div class="options">
+					<div class="option option--active option--title">RECUPERAR CONTRASEÑA</div>
+				</div>
+				<ForgotPasswordForm @back-to-login="activeForm = 'LOGIN'" />
+			</template>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import LoginForm from "./LoginForm.vue";
-import RegisterForm from "./RegisterForm.vue";
-import { ref } from "vue";
+import LoginForm from './LoginForm.vue'
+import RegisterForm from './RegisterForm.vue'
+import ForgotPasswordForm from './ForgotPasswordForm.vue'
+import { ref } from 'vue'
 
-const activeForm = ref<"LOGIN" | "REGISTER">("LOGIN");
-
-const changeToLogin = () => {
-	activeForm.value = "LOGIN";
-};
-const changeToRegister = () => {
-	activeForm.value = "REGISTER";
-};
+const activeForm = ref<'LOGIN' | 'REGISTER' | 'FORGOT_PASSWORD'>('LOGIN')
 </script>
 
 <style scoped>
@@ -69,17 +65,11 @@ const changeToRegister = () => {
 .option:hover {
 	font-size: 1.5rem;
 	color: black;
-	background-color: rgb(210, 210, 247);
 	background-color: rgb(255, 255, 255);
 }
 
-.form {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	padding: 1rem;
-	width: 400px;
-	background-color: rgb(210, 210, 247);
-	background-color: rgb(255, 255, 255);
+.option--title {
+	grid-column: 1 / -1;
+	pointer-events: none;
 }
 </style>

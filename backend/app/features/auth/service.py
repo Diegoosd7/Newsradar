@@ -56,11 +56,7 @@ class AuthService(CommonService):
         try:
             self.email_service.send_verification_email(user.email, verification_token)
         except Exception as exc:
-            self.db.rollback()
-            raise HTTPException(
-                status_code=500,
-                detail=f"No se pudo enviar el correo de verificación: {exc}",
-            ) from exc
+            print(f"[WARN] No se pudo enviar el correo de verificación: {exc}")
 
         self.db.commit()
         self.db.refresh(user)

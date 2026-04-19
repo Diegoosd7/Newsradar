@@ -2,20 +2,27 @@
 	<div class="account-info">
 		<p class="title">INFORMACIÓN DE LA CUENTA</p>
 		<div class="role-section">
-			<p class="role">ROL: <span class="highlight">GESTOR</span></p>
+			<p class="role">
+				ROL: <span class="highlight">{{ auth.role }}</span>
+			</p>
 			<p class="admin-callout">
 				Para cambiar de rol, contacta con tu administrador.
 			</p>
 		</div>
 		<div class="verification-section">
-			<button class="form-button">VERIFICAR CUENTA</button>
-			<p>Te hemos enviado un email de verificación</p>
-			<p class="verify-tag">CUENTA VERIFICADA</p>
+			<p v-if="auth.user?.is_verified" class="verify-tag">CUENTA VERIFICADA</p>
+			<template v-else>
+				<p>Tu cuenta aún no está verificada. Revisa tu bandeja de entrada.</p>
+			</template>
 		</div>
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
+</script>
 
 <style scoped>
 .account-info {
