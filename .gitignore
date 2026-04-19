@@ -207,6 +207,8 @@ marimo/_lsp/
 __marimo__/
 
 /backend/news.db
+/backend/news.db-shm
+/backend/news.db-wal
 
 # Logs
 logs
