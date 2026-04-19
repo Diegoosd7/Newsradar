@@ -1,8 +1,12 @@
+from datetime import datetime, timedelta, timezone
+from secrets import token_urlsafe
 from uuid import uuid4
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from .schemas import TokenResponse, LoginRequest
+from .schemas import TokenResponse, LoginRequest, VerifyEmailResponse
 from ...core.common_service import CommonService
+from ...core.email_service import EmailService
 from ...core.shared_schemas import UserCreate, UserResponse
 from ...db.models import User, Role, CrossRoleUser
 
@@ -13,6 +17,7 @@ active_tokens: dict[str, int] = {}
 class AuthService(CommonService):
     def __init__(self, db: Session):
         super().__init__(db)
+        self.email_service = EmailService()
 
     def login(self, payload: LoginRequest) -> TokenResponse:
         user = self.db.query(User).filter(User.email == payload.email).first()
@@ -29,6 +34,8 @@ class AuthService(CommonService):
             raise HTTPException(status_code=409, detail="El email ya está registrado")
 
         self._ensure_roles_exist(payload.role_ids)
+        verification_token = token_urlsafe(32)
+        verification_token_expires_at = datetime.utcnow() + timedelta(hours=24)
 
         user = User(
             email=payload.email,
@@ -36,12 +43,24 @@ class AuthService(CommonService):
             first_name=payload.first_name,
             last_name=payload.last_name,
             organization=payload.organization,
+            is_verified=False,
+            verification_token=verification_token,
+            verification_token_expires_at=verification_token_expires_at,
         )
         self.db.add(user)
         self.db.flush()
 
         for role_id in payload.role_ids:
             self.db.add(CrossRoleUser(user_id=user.id, role_id=role_id))
+
+        try:
+            self.email_service.send_verification_email(user.email, verification_token)
+        except Exception as exc:
+            self.db.rollback()
+            raise HTTPException(
+                status_code=500,
+                detail=f"No se pudo enviar el correo de verificación: {exc}",
+            ) from exc
 
         self.db.commit()
         self.db.refresh(user)
@@ -53,7 +72,28 @@ class AuthService(CommonService):
             last_name=user.last_name,
             organization=user.organization,
             role_ids=payload.role_ids,
+            is_verified=user.is_verified,
         )
+
+    def verify_email(self, token: str) -> VerifyEmailResponse:
+        user = self.db.query(User).filter(User.verification_token == token).first()
+        if user is None:
+            raise HTTPException(status_code=400, detail="Token de verificación inválido")
+
+        expires_at = user.verification_token_expires_at
+        now = datetime.utcnow()
+        if expires_at is None or expires_at <= now:
+            user.verification_token = None
+            user.verification_token_expires_at = None
+            self.db.commit()
+            raise HTTPException(status_code=400, detail="Token de verificación expirado")
+
+        user.is_verified = True
+        user.verification_token = None
+        user.verification_token_expires_at = None
+        self.db.commit()
+
+        return VerifyEmailResponse(message="Email verificado correctamente")
 
     def _ensure_roles_exist(self, role_ids: list[int]) -> None:
         if not role_ids:

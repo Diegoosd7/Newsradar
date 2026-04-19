@@ -1,9 +1,9 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from .schemas import TokenResponse, LoginRequest
+from .schemas import TokenResponse, LoginRequest, VerifyEmailResponse
 from .service import AuthService
 from ...db.database import get_db
-from ...core.shared_schemas import UserInDB, UserCreate, UserResponse
+from ...core.shared_schemas import UserCreate, UserResponse
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -24,3 +24,11 @@ def register(
     payload: UserCreate, service: AuthService = Depends(get_auth_service)
 ) -> UserResponse:
     return service.register(payload)
+
+
+@router.get("/verify-email", response_model=VerifyEmailResponse, tags=["auth"])
+def verify_email(
+    token: str,
+    service: AuthService = Depends(get_auth_service),
+) -> VerifyEmailResponse:
+    return service.verify_email(token)

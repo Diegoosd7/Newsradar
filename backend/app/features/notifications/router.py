@@ -15,6 +15,33 @@ def get_notifications_service(db: Session = Depends(get_db)):
 
 
 @router.get(
+    "/{user_id}/notifications",
+    response_model=List[NotificationResponse],
+    tags=["notifications"],
+)
+def list_user_notifications(
+    user_id: int,
+    _: UserInDB = Depends(get_current_user),
+    service: NotificationsService = Depends(get_notifications_service),
+) -> List[NotificationResponse]:
+    return service.list_user_notifications(user_id)
+
+
+@router.patch(
+    "/{user_id}/notifications/{notification_id}/read",
+    response_model=NotificationResponse,
+    tags=["notifications"],
+)
+def mark_notification_as_read(
+    user_id: int,
+    notification_id: int,
+    _: UserInDB = Depends(get_current_user),
+    service: NotificationsService = Depends(get_notifications_service),
+) -> NotificationResponse:
+    return service.mark_notification_as_read(user_id, notification_id)
+
+
+@router.get(
     "/{user_id}/alerts/{alert_id}/notifications",
     response_model=List[NotificationResponse],
     tags=["notifications"],

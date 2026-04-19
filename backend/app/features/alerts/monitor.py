@@ -12,7 +12,7 @@
 #   5. Para cada noticia candidata:
 #      a. Registrar la noticia en news_item (deduplicación por URL).
 #      b. Crear una Notification en BD (deduplicación por alerta+noticia).
-#   6. [TODO Sprint 3] Notificar al usuario por email y buzón de app.
+#   6. Crear la notificación en buzón interno y enviar email al usuario.
 #
 # Decisión de diseño:
 #   Este módulo recibe una SessionFactory (callable que devuelve Session)
@@ -31,6 +31,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.matcher import filter_matching_news, MatchResult
+from app.features.notifications.service import NotificationsService
 from app.features.rss_channels.fetcher import fetch_news_from_channel, NewsItemData
 from app.db.models import (
     Alert,
@@ -89,6 +90,13 @@ def _execute_monitor(alert_id: int, db: Session) -> None:
         return
 
     logger.info("Monitor iniciado para alerta '%s' (id=%d)", alert.name, alert_id)
+
+    user = db.query(User).filter(User.id == alert.user_id).first()
+    if user is None:
+        logger.warning("Monitor: usuario %d no encontrado para alerta %d.", alert.user_id, alert_id)
+        return
+
+    notifications_service = NotificationsService(db)
 
     # ------------------------------------------------------------------
     # Paso 2: Cargar los descriptores de la alerta
@@ -225,10 +233,10 @@ def _execute_monitor(alert_id: int, db: Session) -> None:
             # Error al persistir la noticia — ya logueado en el helper
             continue
 
-        created = _create_notification_if_new(
-            db=db,
-            alert_id=alert_id,
-            news_item_id=news_item_db.id,
+        created = notifications_service.create_and_dispatch_notification(
+            alert=alert,
+            user=user,
+            news_item=news_item_db,
             matched_descriptor=match.matched_descriptor,
             timestamp=now,
         )
@@ -241,22 +249,6 @@ def _execute_monitor(alert_id: int, db: Session) -> None:
         notifications_created,
     )
 
-    # ------------------------------------------------------------------
-    # Paso 6 [TODO Sprint 3]: Enviar notificaciones al usuario
-    #
-    # Cuando Diego y Gonzalo implementen el Email Service en el Sprint 3,
-    # deben llamar aquí. La información necesaria ya está en BD:
-    #   - alert.user_id → User → email
-    #   - Notification con news_item_id → NewsItem con title, url, summary
-    #   - Notification.matched_descriptor → para el asunto del email
-    #   - Notification.timestamp → para "Actualización de X en <día/hora>"
-    #
-    # Ejemplo de integración futura:
-    #   if notifications_created > 0:
-    #       user = db.query(User).filter(User.id == alert.user_id).first()
-    #       send_alert_email(user, alert, notifications_created)
-    #       send_inbox_notification(user, alert, notifications_created)
-    # ------------------------------------------------------------------
     if notifications_created > 0:
         _log_pending_notifications(db, alert_id, alert.name)
 
@@ -306,50 +298,6 @@ def _get_or_create_news_item(
         db.rollback()
         logger.error("Error al persistir NewsItem (%s): %s", news_data.url, exc)
         return None
-
-
-def _create_notification_if_new(
-    db: Session,
-    alert_id: int,
-    news_item_id: int,
-    matched_descriptor: str | None,
-    timestamp: datetime,
-) -> bool:
-    """
-    Crea una Notification si no existe ya para ese par (alert_id, news_item_id).
-
-    La constraint UniqueConstraint("alert_id", "news_item_id") en el modelo
-    Notification garantiza esto a nivel de BD. Aquí lo comprobamos antes
-    para evitar el overhead de un IntegrityError innecesario.
-
-    Returns:
-        True si se creó la notificación, False si ya existía.
-    """
-    existing = (
-        db.query(Notification)
-        .filter(
-            Notification.alert_id == alert_id,
-            Notification.news_item_id == news_item_id,
-        )
-        .first()
-    )
-    if existing:
-        return False
-
-    notification = Notification(
-        alert_id=alert_id,
-        news_item_id=news_item_id,
-        timestamp=timestamp,
-        matched_descriptor=matched_descriptor,
-        is_read=False,
-    )
-    try:
-        db.add(notification)
-        db.commit()
-        return True
-    except IntegrityError:
-        db.rollback()
-        return False
 
 
 def _log_pending_notifications(db: Session, alert_id: int, alert_name: str) -> None:
