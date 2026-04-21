@@ -10,6 +10,18 @@ class RSSChannelService(CommonService):
     def __init__(self, db: Session):
         super().__init__(db)
 
+    def list_rss_channels(self) -> List[RSSChannelResponse]:
+        channels = self.db.query(RSSChannel).all()
+        return [
+            RSSChannelResponse(
+                id=channel.id,
+                information_source_id=channel.information_source_id,
+                category_id=channel.category_id,
+                url=channel.url,
+            )
+            for channel in channels
+        ]
+
     def list_source_channels(
         self,
         source_id: int,

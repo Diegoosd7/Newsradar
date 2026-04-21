@@ -6,8 +6,12 @@
 </template>
 
 <script setup lang="ts">
-type Props = { title: string; number: number };
-const props = defineProps<Props>();
+type Props = {
+	title: string;
+	number: number;
+};
+
+defineProps<Props>();
 </script>
 
 <style scoped>
@@ -19,10 +23,16 @@ const props = defineProps<Props>();
 	align-items: center;
 	width: 100%;
 	padding: 1rem;
+	min-height: 140px;
+}
+
+.title {
+	margin: 0;
 }
 
 .number {
 	font-weight: bold;
 	font-size: 2rem;
+	margin: 0.5rem 0 0;
 }
 </style>

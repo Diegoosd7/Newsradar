@@ -24,7 +24,6 @@ class NotificationsService(CommonService):
         self.email_service = EmailService()
 
     def list_user_notifications(self, user_id: int) -> List[NotificationResponse]:
-        self._ensure_user_exists(user_id)
         notifications = (
             self.db.query(Notification)
             .join(Alert, Alert.id == Notification.alert_id)
@@ -98,6 +97,9 @@ class NotificationsService(CommonService):
         self.db.add(notification)
         self.db.flush()
 
+        self.db.commit()
+        self.db.refresh(notification)
+
         published_or_timestamp = news_item.published or notification.timestamp
         source_name = self._get_source_name(news_item)
         news_datetime_text = published_or_timestamp.strftime("%d/%m/%Y %H:%M")
@@ -112,14 +114,11 @@ class NotificationsService(CommonService):
                 summary=news_item.summary,
             )
         except Exception as exc:
-            self.db.rollback()
-            raise HTTPException(
-                status_code=500,
-                detail=f"No se pudo enviar la notificación por email: {exc}",
-            ) from exc
+            print(
+                f"Warning: no se pudo enviar el email de la notificación "
+                f"{notification.id} para la alerta {alert.id}: {exc}"
+            )
 
-        self.db.commit()
-        self.db.refresh(notification)
         return True
 
     def get_alert_notification(
