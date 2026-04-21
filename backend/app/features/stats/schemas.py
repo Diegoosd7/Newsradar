@@ -17,3 +17,34 @@ class StatsUpdate(BaseModel):
 
 class StatsResponse(StatsBase):
     id: int
+
+
+class CategoryCountItem(BaseModel):
+    category_code: str
+    category_label: str
+    count: int
+
+
+class TrendingWordItem(BaseModel):
+    text: str
+    value: int
+
+
+class TrendingCategoryItem(BaseModel):
+    category_code: str
+    category_label: str
+    words: List[TrendingWordItem]
+
+
+class DashboardSummary(BaseModel):
+    sources: int
+    rss_channels: int
+    news: int
+    alerts: int
+
+
+class DashboardStatsResponse(BaseModel):
+    summary: DashboardSummary
+    news_by_category: List[CategoryCountItem]
+    alerts_by_category: List[CategoryCountItem]
+    trending_by_category: List[TrendingCategoryItem]

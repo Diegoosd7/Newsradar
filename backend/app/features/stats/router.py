@@ -1,7 +1,12 @@
 from typing import List
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
-from .schemas import StatsResponse, StatsCreate, StatsUpdate
+from .schemas import (
+    StatsResponse,
+    StatsCreate,
+    StatsUpdate,
+    DashboardStatsResponse,
+)
 from .service import StatsService
 from ...db.database import get_db
 from ...core.security import get_current_user
@@ -29,6 +34,14 @@ def create_stats(
     service: StatsService = Depends(get_stats_service),
 ) -> StatsResponse:
     return service.create_stats(payload)
+
+
+@router.get("/dashboard", response_model=DashboardStatsResponse, tags=["stats"])
+def get_dashboard_stats(
+    _: UserInDB = Depends(get_current_user),
+    service: StatsService = Depends(get_stats_service),
+) -> DashboardStatsResponse:
+    return service.get_dashboard_stats()
 
 
 @router.get("/{stats_id}", response_model=StatsResponse, tags=["stats"])

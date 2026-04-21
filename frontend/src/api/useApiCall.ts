@@ -5,6 +5,7 @@ import type {
   UserResponse,
   UserUpdateRequest,
   RoleResponse,
+  DashboardStatsResponse,
 } from './types'
 
 const BASE_URL = '/api/v1'
@@ -89,5 +90,20 @@ export function useApiCall() {
     return handleResponse<RoleResponse[]>(res)
   }
 
-  return { login, register, getUsers, updateUser, deleteUser, getRoles }
+  async function getDashboardStats(token: string): Promise<DashboardStatsResponse> {
+    const res = await fetch(`${BASE_URL}/stats/dashboard`, {
+      headers: authHeaders(token),
+    })
+    return handleResponse<DashboardStatsResponse>(res)
+  }
+
+  return {
+    login,
+    register,
+    getUsers,
+    updateUser,
+    deleteUser,
+    getRoles,
+    getDashboardStats,
+  }
 }
