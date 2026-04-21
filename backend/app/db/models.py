@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Text, Boolean, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
+from sympy import re
 
 Base = declarative_base()
 
@@ -16,6 +17,8 @@ class User(Base):
     is_verified = Column(Boolean, nullable=False, default=False)
     verification_token = Column(String(255), nullable=True, unique=True)
     verification_token_expires_at = Column(DateTime, nullable=True)
+    reset_password_token = Column(String(100), unique=True, nullable=True)
+    reset_password_expires_at = Column(DateTime, nullable=True)
 
 
 class Role(Base):

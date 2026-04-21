@@ -33,11 +33,25 @@ const sent = ref(false)
 const sendForm = async () => {
 	if (!email.value) return
 	loading.value = true
-	// El backend aún no tiene endpoint de recuperación de contraseña.
-	// Simulamos un delay y mostramos el mensaje de éxito genérico.
-	await new Promise((resolve) => setTimeout(resolve, 800))
-	loading.value = false
-	sent.value = true
+	
+	try {
+		// Llamada real a tu nuevo endpoint del backend
+		await fetch('/api/v1/auth/forgot-password', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ email: email.value })
+		})
+		
+		// El backend siempre devuelve 200 OK por seguridad, 
+		// así que mostramos el mensaje de éxito directamente.
+		sent.value = true
+	} catch (error) {
+		console.error("Error al comunicarse con el servidor:", error)
+	} finally {
+		loading.value = false
+	}
 }
 </script>
 

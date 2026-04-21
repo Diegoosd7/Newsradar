@@ -1,16 +1,17 @@
-from datetime import datetime, timedelta, timezone
-from secrets import token_urlsafe
+import logging
+from datetime import datetime, timedelta
 from uuid import uuid4
-
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from .schemas import TokenResponse, LoginRequest, VerifyEmailResponse
+from secrets import token_urlsafe
+
+from .schemas import TokenResponse, LoginRequest, ForgotPasswordRequest, ResetPasswordRequest, VerifyEmailResponse
 from ...core.common_service import CommonService
-from ...core.email_service import EmailService
 from ...core.shared_schemas import UserCreate, UserResponse
 from ...db.models import User, Role, CrossRoleUser
+from ...core.email_service import EmailService 
 
-
+logger = logging.getLogger(__name__)
 active_tokens: dict[str, int] = {}
 
 
@@ -26,7 +27,11 @@ class AuthService(CommonService):
 
         token = str(uuid4())
         active_tokens[token] = user.id
-        return TokenResponse(access_token=token)
+        return TokenResponse(
+            access_token=token,
+            token_type="bearer",
+            user=UserResponse.from_orm(user)
+        )
 
     def register(self, payload: UserCreate) -> UserResponse:
         existing = self.db.query(User).filter(User.email == payload.email).first()
@@ -88,6 +93,7 @@ class AuthService(CommonService):
         user.verification_token = None
         user.verification_token_expires_at = None
         self.db.commit()
+        self.db.refresh(user)
 
         return VerifyEmailResponse(message="Email verificado correctamente")
 
@@ -99,3 +105,36 @@ class AuthService(CommonService):
         missing = [role_id for role_id in role_ids if role_id not in found_ids]
         if missing:
             raise HTTPException(status_code=400, detail=f"Roles no encontrados: {missing}")
+        
+    def forgot_password(self, payload: ForgotPasswordRequest) -> dict:
+        user = self.db.query(User).filter(User.email == payload.email).first()
+        
+        # Devolvemos siempre mensaje de éxito por seguridad para evitar enumeración de usuarios
+        if not user:
+            return {"message": "Si el email existe, se han enviado las instrucciones."}
+
+        token = str(uuid4())
+        user.reset_password_token = token
+        user.reset_password_expires_at = datetime.utcnow() + timedelta(hours=1)
+        self.db.commit()
+
+        try:
+            self.email_service.send_password_reset_email(user.email, token)
+        except Exception as e:
+            logger.warning(f"Error al enviar el email de recuperación: {str(e)}")
+
+        return {"message": "Si el email existe, se han enviado las instrucciones."}
+
+    def reset_password(self, payload: ResetPasswordRequest) -> dict:
+        user = self.db.query(User).filter(User.reset_password_token == payload.token).first()
+
+        if not user or user.reset_password_expires_at < datetime.utcnow():
+            raise HTTPException(status_code=400, detail="El enlace es inválido o ha expirado.")
+
+        # Cambiamos contraseña y limpiamos el token
+        user.password = payload.new_password
+        user.reset_password_token = None
+        user.reset_password_expires_at = None
+        self.db.commit()
+
+        return {"message": "Contraseña actualizada correctamente."}

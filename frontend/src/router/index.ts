@@ -56,6 +56,12 @@ const router = createRouter({
       name: 'cuenta',
       component: AccountView,
     },
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: () => import('@/components/login/ResetPasswordView.vue'),
+      meta: { public: true } // Esto permite que se acceda sin estar logueado
+    },
   ],
 })
 

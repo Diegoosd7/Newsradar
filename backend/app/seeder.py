@@ -1,5 +1,5 @@
-from app.db.database import SessionLocal, engine
-from app.db.models import Base, InformationSource, Category, RSSChannel
+from db.database import SessionLocal, engine
+from db.models import Base, InformationSource, Category, RSSChannel
 
 # 1. Definir los datos iniciales
 categorias_iptc = [

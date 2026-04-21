@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from .schemas import TokenResponse, LoginRequest, VerifyEmailResponse
+from .schemas import TokenResponse, LoginRequest, VerifyEmailResponse, ForgotPasswordRequest, ResetPasswordRequest
 from .service import AuthService
 from ...db.database import get_db
 from ...core.shared_schemas import UserCreate, UserResponse
@@ -32,3 +32,17 @@ def verify_email(
     service: AuthService = Depends(get_auth_service),
 ) -> VerifyEmailResponse:
     return service.verify_email(token)
+
+@router.post("/forgot-password", tags=["auth"])
+def forgot_password(
+    payload: ForgotPasswordRequest, service: AuthService = Depends(get_auth_service)
+):
+    """Genera un token y envía un email para restablecer la contraseña."""
+    return service.forgot_password(payload)
+
+@router.post("/reset-password", tags=["auth"])
+def reset_password(
+    payload: ResetPasswordRequest, service: AuthService = Depends(get_auth_service)
+):
+    """Actualiza la contraseña del usuario utilizando un token válido."""
+    return service.reset_password(payload)
