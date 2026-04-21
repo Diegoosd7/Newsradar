@@ -24,7 +24,6 @@ class NotificationsService(CommonService):
         self.email_service = EmailService()
 
     def list_user_notifications(self, user_id: int) -> List[NotificationResponse]:
-        self._ensure_user_exists(user_id)
         notifications = (
             self.db.query(Notification)
             .join(Alert, Alert.id == Notification.alert_id)
@@ -98,7 +97,6 @@ class NotificationsService(CommonService):
         self.db.add(notification)
         self.db.flush()
 
-        # Guardamos primero la notificación interna.
         self.db.commit()
         self.db.refresh(notification)
 
