@@ -1,7 +1,7 @@
 <template>
 	<AppHeader />
 	<div class="user-view">
-		<AppNavbar v-if="auth.isAuthenticated" :role="auth.role" @logout="handleLogout" />
+		<AppNavbar v-if="auth.isAuthenticated" role="GESTOR" @logout="handleLogout" />
 		<RouterView class="content" />
 	</div>
 </template>

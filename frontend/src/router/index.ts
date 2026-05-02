@@ -38,13 +38,13 @@ const router = createRouter({
       path: '/fuentes-y-rss',
       name: 'fuentes-y-rss',
       component: SourcesRssView,
-      meta: { requiresGestor: true },
+      // meta: { requiresGestor: true },
     },
     {
       path: '/alertas',
       name: 'alertas',
       component: AlertsView,
-      meta: { requiresGestor: true },
+      // meta: { requiresGestor: true },
     },
     {
       path: '/notificaciones',
