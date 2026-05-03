@@ -62,6 +62,10 @@ def start_scheduler(db: Session) -> None:
     """
     # Importación local para evitar importación circular:
     # scheduler.py → monitor.py → models.py → (no importa scheduler)
+    if scheduler.running:
+        logger.info("Scheduler ya está corriendo, omitiendo inicio duplicado.")
+        return
+
     from app.features.alerts.monitor import run_alert_monitor_job
     from app.db.database import SessionLocal
 
