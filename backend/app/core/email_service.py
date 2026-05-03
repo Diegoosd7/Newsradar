@@ -16,6 +16,7 @@ class EmailService:
         self.smtp_password = os.getenv("SMTP_PASSWORD")
         self.smtp_from = os.getenv("SMTP_FROM")
         self.app_base_url = os.getenv("APP_BASE_URL", "http://localhost:8000")
+        self.frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
     def send_verification_email(self, recipient_email: str, token: str) -> None:
         verification_url = (
@@ -30,6 +31,20 @@ class EmailService:
             "Para verificar tu email, abre este enlace:\n"
             f"{verification_url}\n\n"
             "Este enlace caduca en 24 horas."
+        )
+        self._send_message(message)
+
+    def send_password_reset_email(self, recipient_email: str, token: str) -> None:
+        reset_url = f"{self.frontend_url.rstrip('/')}/reset-password?token={token}"
+        message = EmailMessage()
+        message["Subject"] = "Recuperación de contraseña de NewsRadar"
+        message["From"] = self._require_setting(self.smtp_from, "SMTP_FROM")
+        message["To"] = recipient_email
+        message.set_content(
+            "Has solicitado restablecer tu contraseña en NewsRadar.\n\n"
+            "Para elegir una nueva contraseña, haz clic en el siguiente enlace:\n"
+            f"{reset_url}\n\n"
+            "Este enlace caducará en 1 hora. Si no has solicitado esto, ignora este correo."
         )
         self._send_message(message)
 

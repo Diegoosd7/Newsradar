@@ -43,3 +43,35 @@ export interface RoleResponse {
   id: number
   name: string
 }
+
+// Dashboard stats
+export interface CategoryCountItem {
+  category_code: string
+  category_label: string
+  count: number
+}
+
+export interface TrendingWordItem {
+  text: string
+  value: number
+}
+
+export interface TrendingCategoryItem {
+  category_code: string
+  category_label: string
+  words: TrendingWordItem[]
+}
+
+export interface DashboardSummary {
+  sources: number
+  rss_channels: number
+  news: number
+  alerts: number
+}
+
+export interface DashboardStatsResponse {
+  summary: DashboardSummary
+  news_by_category: CategoryCountItem[]
+  alerts_by_category: CategoryCountItem[]
+  trending_by_category: TrendingCategoryItem[]
+}

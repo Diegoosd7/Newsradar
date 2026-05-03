@@ -7,7 +7,7 @@ from ...db.database import get_db
 from ...core.security import get_current_user
 from ...core.shared_schemas import UserInDB
 
-router = APIRouter(prefix="/information-sources", tags=["rss-channels"])
+router = APIRouter(tags=["rss-channels"])
 
 
 def get_rss_channels_service(db: Session = Depends(get_db)):
@@ -15,7 +15,19 @@ def get_rss_channels_service(db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/{source_id}/rss-channels",
+    "/rss-channels",
+    response_model=List[RSSChannelResponse],
+    tags=["rss-channels"],
+)
+def list_rss_channels(
+    _: UserInDB = Depends(get_current_user),
+    service: RSSChannelService = Depends(get_rss_channels_service),
+) -> List[RSSChannelResponse]:
+    return service.list_rss_channels()
+
+
+@router.get(
+    "/information-sources/{source_id}/rss-channels",
     response_model=List[RSSChannelResponse],
     tags=["rss-channels"],
 )
@@ -28,7 +40,7 @@ def list_source_channels(
 
 
 @router.post(
-    "/{source_id}/rss-channels",
+    "/information-sources/{source_id}/rss-channels",
     response_model=RSSChannelResponse,
     status_code=201,
     tags=["rss-channels"],
@@ -43,7 +55,7 @@ def create_source_channel(
 
 
 @router.get(
-    "/{source_id}/rss-channels/{channel_id}",
+    "/information-sources/{source_id}/rss-channels/{channel_id}",
     response_model=RSSChannelResponse,
     tags=["rss-channels"],
 )
@@ -57,7 +69,7 @@ def get_source_channel(
 
 
 @router.put(
-    "/{source_id}/rss-channels/{channel_id}",
+    "/information-sources/{source_id}/rss-channels/{channel_id}",
     response_model=RSSChannelResponse,
     tags=["rss-channels"],
 )
@@ -72,7 +84,7 @@ def update_source_channel(
 
 
 @router.delete(
-    "/{source_id}/rss-channels/{channel_id}",
+    "/information-sources/{source_id}/rss-channels/{channel_id}",
     status_code=204,
     response_model=None,
     response_class=Response,

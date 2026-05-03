@@ -51,23 +51,27 @@ export const useAuthStore = defineStore('auth', () => {
   const api = useApiCall()
 
   async function login(email: string, password: string): Promise<void> {
-    const tokenRes = await api.login({ email, password })
-    const t = tokenRes.access_token
+      // 1. Hacemos login y sacamos el token
+      const tokenRes = await api.login({ email, password })
+      const t = tokenRes.access_token
 
-    const [users, roles] = await Promise.all([api.getUsers(t), api.getRoles(t)])
+      // 2. Nos bajamos la lista de usuarios y roles
+      const [users, roles] = await Promise.all([api.getUsers(t), api.getRoles(t)])
 
-    const found = users.find((u: UserResponse) => u.email === email)
-    if (!found) throw new Error('Usuario no encontrado tras el login')
+      const found = users.find((u: any) => u.email === email)
+      if (!found) throw new Error('Usuario no encontrado tras el login')
 
-    const authUser: AuthUser = {
-      ...found,
-      role: resolveRole(found.role_ids, roles),
+      // 3. Montamos el usuario final
+      const authUser: AuthUser = {
+        ...found,
+        is_verified: (tokenRes as any).user?.is_verified ?? found.is_verified ?? false,
+        role: resolveRole(found.role_ids, roles),
+      }
+
+      token.value = t
+      user.value = authUser
+      saveToStorage(t, authUser)
     }
-
-    token.value = t
-    user.value = authUser
-    saveToStorage(t, authUser)
-  }
 
   function logout() {
     token.value = null

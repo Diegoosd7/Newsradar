@@ -16,7 +16,6 @@ from app.db.database import SessionLocal, engine
 from app.db.models import Base
 from app.core.scheduler import start_scheduler, stop_scheduler
 
-# Carga las variables del archivo backend/.env sin depender del directorio actual
 ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
 load_dotenv(dotenv_path=ENV_FILE)
 
@@ -31,12 +30,6 @@ app = FastAPI(
 
 @app.on_event("startup")
 def on_startup() -> None:
-    """
-    Arranca el scheduler al iniciar la aplicación.
-    Crea una sesión temporal solo para cargar las alertas existentes,
-    la cierra inmediatamente después — el scheduler gestiona sus propias
-    sesiones a partir de ese momento.
-    """
     Base.metadata.create_all(bind=engine)
 
     db = SessionLocal()
@@ -48,7 +41,6 @@ def on_startup() -> None:
 
 @app.on_event("shutdown")
 def on_shutdown() -> None:
-    """Detiene el scheduler limpiamente al apagar la aplicación."""
     stop_scheduler()
 
 

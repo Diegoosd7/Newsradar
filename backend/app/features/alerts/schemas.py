@@ -9,7 +9,7 @@ class AlertCategoryItem(BaseModel):
 
 class AlertBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=200, example="Alerta economía")
-    descriptors: List[str] = Field(default_factory=list, example=["economía", "inflación", "PIB"])
+    descriptors: List[str] = Field(..., min_length=1, example=["economía", "inflación", "PIB"])
     categories: List[AlertCategoryItem] = Field(default_factory=list)
     cron_expression: str = Field(..., min_length=1, max_length=120, example="* * * * *")
 

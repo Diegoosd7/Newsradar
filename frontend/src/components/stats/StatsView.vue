@@ -3,61 +3,90 @@
 		<div class="header">
 			<h1>Estadísticas</h1>
 		</div>
+
+		<div v-if="errorMessage" class="error-message">
+			{{ errorMessage }}
+		</div>
+
 		<div class="main">
 			<div class="total-number-container">
-				<template v-for="stat in totalNumberStats">
-					<TotalNumberStat v-bind="stat" />
-				</template>
+				<TotalNumberStat
+					v-for="stat in totalNumberStats"
+					:key="stat.title"
+					:title="stat.title"
+					:number="stat.number"
+				/>
 			</div>
+
 			<div class="per-category-container">
-				<template v-for="stat in perCategoryStats">
-					<PerCategoryStat v-bind="stat" />
-				</template>
+				<PerCategoryStat
+					title="NOTICIAS POR CATEGORÍA"
+					:items="newsByCategory"
+				/>
+				<PerCategoryStat
+					title="ALERTAS POR CATEGORÍA"
+					:items="alertsByCategory"
+				/>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
 import PerCategoryStat from "./PerCategoryStat.vue";
 import TotalNumberStat from "./TotalNumberStat.vue";
-import { onMounted, ref } from "vue";
+import { useApiCall } from "@/api/useApiCall";
+import { useAuthStore } from "@/stores/auth";
+import type { CategoryCountItem } from "@/api/types";
 
-const totalNumberStats = ref([
+type TotalNumberStatItem = {
+	title: string;
+	number: number;
+};
+
+const api = useApiCall();
+const auth = useAuthStore();
+
+const errorMessage = ref("");
+
+const totalNumberStats = ref<TotalNumberStatItem[]>([
 	{ title: "FUENTES", number: 0 },
 	{ title: "RSS", number: 0 },
 	{ title: "NOTICIAS", number: 0 },
 	{ title: "ALERTAS", number: 0 },
 ]);
-const perCategoryStats = ref([
-	{ title: "NOTICIAS POR CATEGORÍA" },
-	{ title: "ALERTAS POR CATEGORÍA" },
-]);
 
-const getTotalStats = () => {
-	const fuentesNum = 10;
-	const rssNum = 10;
-	const noticiasNum = 10;
-	const alertasNum = 10;
+const newsByCategory = ref<CategoryCountItem[]>([]);
+const alertsByCategory = ref<CategoryCountItem[]>([]);
 
-	totalNumberStats.value = [
-		{ title: "FUENTES", number: fuentesNum },
-		{ title: "RSS", number: rssNum },
-		{ title: "NOTICIAS", number: noticiasNum },
-		{ title: "ALERTAS", number: alertasNum },
-	];
-};
+const loadDashboardStats = async () => {
+	if (!auth.token) {
+		errorMessage.value = "No hay sesión activa.";
+		return;
+	}
 
-const getPerCategoryStats = () => {
-	perCategoryStats.value = [
-		{ title: "NOTICIAS POR CATEGORÍA" },
-		{ title: "ALERTAS POR CATEGORÍA" },
-	];
+	try {
+		const data = await api.getDashboardStats(auth.token);
+
+		totalNumberStats.value = [
+			{ title: "FUENTES", number: data.summary.sources },
+			{ title: "RSS", number: data.summary.rss_channels },
+			{ title: "NOTICIAS", number: data.summary.news },
+			{ title: "ALERTAS", number: data.summary.alerts },
+		];
+
+		newsByCategory.value = data.news_by_category;
+		alertsByCategory.value = data.alerts_by_category;
+		errorMessage.value = "";
+	} catch (error) {
+		console.error(error);
+		errorMessage.value = "No se pudieron cargar las estadísticas.";
+	}
 };
 
 onMounted(() => {
-	getTotalStats();
-	getPerCategoryStats();
+	loadDashboardStats();
 });
 </script>
 
@@ -79,5 +108,12 @@ onMounted(() => {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	gap: 1rem;
+}
+
+.error-message {
+	padding: 0.75rem 1rem;
+	border: 2px solid #b00020;
+	color: #b00020;
+	background: #fff5f6;
 }
 </style>

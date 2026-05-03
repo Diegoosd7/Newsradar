@@ -16,6 +16,14 @@ class FakeAuthService:
         return {
             "access_token": "fake-token-123",
             "token_type": "bearer",
+            "user": {
+                "id": 1,
+                "email": payload.email if hasattr(payload, 'email') else "test@example.com",
+                "first_name": "Test",
+                "last_name": "User",
+                "organization": "UC3M",
+                "is_verified": True
+            }
         }
 
     def register(self, payload):
@@ -160,6 +168,7 @@ def test_login_user():
     data = response.json()
     assert data["access_token"] == "fake-token-123"
     assert data["token_type"] == "bearer"
+    assert "user" in data
 
 
 def test_login_user_missing_password():

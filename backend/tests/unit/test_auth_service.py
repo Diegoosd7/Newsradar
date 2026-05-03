@@ -26,6 +26,7 @@ def test_login_success():
         first_name="Test",
         last_name="User",
         organization="UC3M",
+        is_verified=True
     )
 
     db.query.return_value.filter.return_value.first.return_value = user

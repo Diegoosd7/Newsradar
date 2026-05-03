@@ -17,6 +17,10 @@ class UserResponse(UserBase):
     id: int
     is_verified: bool = False
 
+    model_config = {
+        "from_attributes": True
+    }
+
 
 class UserInDB(UserResponse):
     password: str
