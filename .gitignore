@@ -209,6 +209,10 @@ __marimo__/
 /backend/news.db
 /backend/news.db-shm
 /backend/news.db-wal
+backend/*.db
+backend/*.db-shm
+backend/*.db-wal
+backend/news.db
 
 # Logs
 logs
@@ -249,3 +253,5 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+backend/test_e2e.db

@@ -55,6 +55,7 @@ def on_shutdown() -> None:
 v1_router = APIRouter()
 v1_router.include_router(alerts_router)
 v1_router.include_router(auth_router)
+v1_router.include_router(categories_router)
 v1_router.include_router(information_sources_router)
 v1_router.include_router(notifications_router)
 v1_router.include_router(roles_router)
