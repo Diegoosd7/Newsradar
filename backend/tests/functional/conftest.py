@@ -106,4 +106,6 @@ def client():
     with TestClient(app) as test_client:
         yield test_client
 
-    app.dependency_overrides.clear()
+    app.dependency_overrides.pop(get_auth_service, None)
+    app.dependency_overrides.pop(get_alerts_service, None)
+    app.dependency_overrides.pop(get_current_user, None)

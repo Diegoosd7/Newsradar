@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, APIRouter
 from dotenv import load_dotenv
 from pathlib import Path
@@ -31,6 +33,9 @@ app = FastAPI(
 @app.on_event("startup")
 def on_startup() -> None:
     Base.metadata.create_all(bind=engine)
+
+    if os.getenv("DISABLE_SCHEDULER", "0") == "1":
+        return
 
     db = SessionLocal()
     try:
