@@ -41,7 +41,7 @@ def client():
     with TestClient(app) as c:
         yield c
 
-    app.dependency_overrides.clear()
+    app.dependency_overrides.pop(get_db, None)
     test_engine.dispose()
     Base.metadata.drop_all(test_engine)
     try:

@@ -1,6 +1,8 @@
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi.testclient import TestClient
@@ -104,9 +106,16 @@ def fake_current_user():
     }
 
 
-app.dependency_overrides[get_auth_service] = lambda: FakeAuthService()
-app.dependency_overrides[get_alerts_service] = lambda: FakeAlertsService()
-app.dependency_overrides[get_current_user] = fake_current_user
+@pytest.fixture(autouse=True, scope="module")
+def _setup_overrides():
+    app.dependency_overrides[get_auth_service] = lambda: FakeAuthService()
+    app.dependency_overrides[get_alerts_service] = lambda: FakeAlertsService()
+    app.dependency_overrides[get_current_user] = fake_current_user
+    yield
+    app.dependency_overrides.pop(get_auth_service, None)
+    app.dependency_overrides.pop(get_alerts_service, None)
+    app.dependency_overrides.pop(get_current_user, None)
+
 
 client = TestClient(app)
 
