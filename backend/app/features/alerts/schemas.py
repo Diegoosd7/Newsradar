@@ -11,6 +11,8 @@ class AlertBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=200, example="Alerta economía")
     descriptors: List[str] = Field(..., min_length=1, example=["economía", "inflación", "PIB"])
     categories: List[AlertCategoryItem] = Field(default_factory=list)
+    rss_channels_ids: List[str] = Field(default_factory=list)
+    information_sources_ids: List[str] = Field(default_factory=list)
     cron_expression: str = Field(..., min_length=1, max_length=120, example="* * * * *")
 
 
@@ -22,6 +24,8 @@ class AlertUpdate(BaseModel):
     name: Optional[str] = Field(None, min_length=1, max_length=200)
     descriptors: Optional[List[str]] = None
     categories: Optional[List[AlertCategoryItem]] = None
+    rss_channels_ids: List[str] = Field(default_factory=list)
+    information_sources_ids: List[str] = Field(default_factory=list)
     cron_expression: Optional[str] = Field(None, min_length=1, max_length=120)
 
 
