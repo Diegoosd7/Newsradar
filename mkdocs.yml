@@ -11,6 +11,7 @@ nav:
   - Prompts: ai-prompts.md
   - Diagramas de arquitectura:
     - Entidad-Relación: diagrams/diagrama-entidad-relacion.md
+    - Componentes: diagrams/diagrama-componentes.md
   - Retrospectivas sprints:
     - Sprint 1: sprints/sprint1-retrospectiva.md
     - Sprint 2: sprints/sprint2-retrospectiva.md
