@@ -16,16 +16,10 @@
 
 <script setup lang="ts">
 import AdminItem from "./AdminItem.vue";
-import { onBeforeMount, onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
+import type { Role } from "@/types/index";
 
-const users = ref([
-	{
-		name: "",
-		organization_name: "",
-		email: "",
-		role: "",
-	},
-]);
+const users = ref<{ name: string; organization_name: string; email: string; role: Role }[]>([]);
 
 const getUsers = () => {
 	users.value = [

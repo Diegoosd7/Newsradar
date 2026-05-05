@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Text, Boolean, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
-from sympy import re
+import re
 
 Base = declarative_base()
 
