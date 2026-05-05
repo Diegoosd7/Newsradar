@@ -1,0 +1,1253 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="index.html">
+      
+      
+        <link rel="next" href="ai-prompts.html">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+    
+    
+      
+        <title>Requerimientos - NewsRadar Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.84d31ad4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#definiciones-y-acronimos" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="NewsRadar Docs" class="md-header__button md-logo" aria-label="NewsRadar Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NewsRadar Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Requerimientos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="NewsRadar Docs" class="md-nav__button md-logo" aria-label="NewsRadar Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    NewsRadar Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="requerimientos.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Requerimientos
+    
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="ai-prompts.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Prompts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Diagramas de arquitectura
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Diagramas de arquitectura
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="diagrams/diagrama-entidad-relacion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Entidad-Relación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Retrospectivas sprints
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Retrospectivas sprints
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sprints/sprint1-retrospectiva.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sprints/sprint2-retrospectiva.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sprints/sprint3-retrospectiva.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0001-lenguaje-backend.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0001-lenguaje-backend
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0002-framework-frontend.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0002-framework-frontend
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0003-gestor-bd.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0003-gestor-bd
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0004-arquitectura-software.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0004-arquitectura-software
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0005-framework-api-rest.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0005-framework-api-rest
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0006-orm.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0006-orm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0007-tests-api-rest.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0007-tests-api-rest
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0008-fetch-nativo-vs-axios.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0008-fetch-nativo-vs-axios
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0009-pinia-localstorage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0009-pinia-localstorage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0010-flujo-login-tres-pasos.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0010-flujo-login-tres-pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0011-rol-lector-por-defecto.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0011-rol-lector-por-defecto
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0012-mock-recuperacion-contrasena.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0012-mock-recuperacion-contrasena.md
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="definiciones-y-acronimos">Definiciones y acrónimos</h1>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr>
+<th><strong>Término</strong></th>
+<th><strong>Definición</strong></th>
+</tr>
+<tr>
+<th><strong>RSS</strong></th>
+<th>Really Simple Syndication. Formato XML estándar para la sindicación
+de contenidos web.</th>
+</tr>
+<tr>
+<th><strong>IPTC</strong></th>
+<th>International Press Telecommunications Council. Organismo que define
+el estándar de categorías para noticias (IPTC Media Topics).</th>
+</tr>
+<tr>
+<th><strong>IPTC Primer Nivel</strong></th>
+<th>Primera jerarquía de categorías del estándar IPTC Media Topics (ej.
+Política, Economía, Deportes).</th>
+</tr>
+<tr>
+<th><strong>Alerta</strong></th>
+<th>Configuración definida por un gestor que especifica un descriptor,
+sus expansiones semánticas, las fuentes a monitorizar y la periodicidad
+(cron).</th>
+</tr>
+<tr>
+<th><strong>Descriptor</strong></th>
+<th>Palabra clave principal o derivada que el sistema utiliza para
+detectar noticias relevantes en un feed RSS.</th>
+</tr>
+<tr>
+<th><strong>Matching</strong></th>
+<th>Proceso de comparación entre los descriptores de una alerta y el
+contenido de las noticias recuperadas de los canales RSS.</th>
+</tr>
+<tr>
+<th><strong>Gestor</strong></th>
+<th>Rol de usuario con capacidad para configurar alertas y fuentes de
+información.</th>
+</tr>
+<tr>
+<th><strong>ADR</strong></th>
+<th>Architecture Decision Record. Registro de decisiones de diseño
+arquitectónico.</th>
+</tr>
+<tr>
+<th><strong>CI/CD</strong></th>
+<th>Continuous Integration / Continuous Deployment. Práctica de
+integración y despliegue automático.</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+
+<h1 id="objetivos-del-sistema">Objetivos del sistema</h1>
+<ul>
+<li><strong>Obj. 1 - Gestión de alertas</strong>: Definir alertas sobre descriptores con expansión semántica por IA, asociadas a categorías IPTC y fuentes RSS, con monitorización continua mediante expresión cron.</li>
+<li><strong>Obj. 2 - Clasificación de información</strong>: Clasificar las noticias detectadas bajo una categoría IPTC (de la alerta o de la fuente RSS), garantizando que solo se usen categorías de primer nivel.</li>
+<li><strong>Obj. 3 - Gestión de notificaciones</strong>: Notificar al usuario por buzón interno y correo electrónico cuando se detectan noticias que coinciden con los descriptores de una alerta.</li>
+<li><strong>Obj. 4 - Gestión de fuentes RSS</strong>: Mantener un catálogo de fuentes y canales RSS categorizados por medio y por categoría IPTC, con alta mínima de 100 canales de 10 medios distintos.</li>
+<li><strong>Obj. 5 - Gestión de usuarios</strong>: Los usuarios pueden crear una cuenta con registro verificado por email, perfil editable y control de acceso por rol.</li>
+<li><strong>Obj. 6 - Panel de mando</strong>: Ofrecer visualización de estadísticas globales, nubes de palabras por categoría, gestión de alertas y fuentes.</li>
+</ul>
+<h1 id="requisitos-funcionales">Requisitos funcionales</h1>
+<h2 id="rf-01-gestion-de-usuarios">RF-01 - Gestión de Usuarios</h2>
+<p>El sistema debe permitir la gestión completa del ciclo de vida de
+usuarios.</p>
+<ul>
+<li><strong>RF-01.1</strong>: El sistema permite el registro de nuevos usuarios con los campos: nombre, apellidos, correo electrónico válido y organización.</li>
+<li><strong>RF-01.2</strong>: Tras el registro, el sistema envía automáticamente un correo de verificación con un enlace con caducidad de 24 horas.</li>
+<li><strong>RF-01.3</strong>: El usuario puede activar su cuenta accediendo al enlace de verificación no caducado.</li>
+<li><strong>RF-01.4</strong>: El sistema proporciona mecanismo de login con email y contraseña.</li>
+<li><strong>RF-01.5</strong>: El sistema proporciona mecanismo de recuperación de contraseña mediante correo electrónico.</li>
+<li><strong>RF-01.6</strong>: El usuario autenticado puede editar sus datos de perfil (nombre, apellidos, organización, contraseña).</li>
+<li><strong>RF-01.7</strong>: Existe un usuario con rol administrador inicial.</li>
+<li><strong>RF-01.8</strong>: Cada usuario registrado recibe el rol de gestor y es capaz de acceder al panel de mando del sistema.</li>
+</ul>
+<h2 id="rf-02-gestion-de-alertas">RF-02 Gestión de Alertas</h2>
+<p>El sistema debe permitir a los gestores definir y administrar alertas de monitorización temática.</p>
+<ul>
+<li><strong>RF-02.1</strong>: Un gestor puede crear alertas hasta un máximo de 20 por usuario. Superar este límite es rechazado por el sistema.</li>
+<li><strong>RF-02.2</strong>: Una alerta se compone de: nombre, palabra clave principal, lista de descriptores (3–10 palabras), categoría IPTC de primer nivel y expresión cron de periodicidad.</li>
+<li><strong>RF-02.3</strong>: El gestor puede seleccionar fuentes RSS concretas para la alerta; por defecto se usan todas las de la misma categoría.</li>
+<li><strong>RF-02.4</strong>: El gestor puede editar todos los campos de una alerta existente.</li>
+<li><strong>RF-02.5</strong>: El gestor puede eliminar una alerta. Al eliminarla, su job de scheduler asociado se cancela.</li>
+<li><strong>RF-02.6</strong>: El usuario puede listar todas sus alertas activas con sus parámetros de configuración.</li>
+<li><strong>RF-02.7</strong>: La alerta puede configurarse para enviar notificaciones al buzón interno, al correo electrónico, o a ambos.</li>
+</ul>
+<h2 id="rf-03-sugerencias-de-palabras-clave-con-ia">RF-03 Sugerencias de Palabras Clave con IA</h2>
+<p>El sistema debe asistir al gestor en la definición de descriptores
+mediante inteligencia artificial generativa.</p>
+<ul>
+<li><strong>RF-03.1</strong>: El gestor introduce una palabra clave. El sistema consulta la API de Google Gemini y devuelve entre 3 y 10 descriptores relacionados (sinónimos, términos afines).</li>
+<li><strong>RF-03.2</strong>: El gestor decide qué descriptores acepta e incluye en la alerta.</li>
+<li><strong>RF-03.3</strong>: El sistema selecciona automáticamente el modelo Gemini disponible (autodetección).</li>
+<li><strong>RF-03.4</strong>: La clave de API de Gemini se gestiona mediante variables de entorno (<code>.env</code>) y no se incluye en el repositorio.</li>
+</ul>
+<h2 id="rf-04-monitorizacion-de-canales-rss">RF-04 Monitorización de Canales RSS</h2>
+<p>El sistema debe leer periódicamente los canales RSS configurados y
+extraer las noticias publicadas.</p>
+<ul>
+<li><strong>RF-04.1</strong>: El sistema lee los feeds RSS de los canales activos según la expresión cron de cada alerta.</li>
+<li><strong>RF-04.2</strong>: Por cada ítem RSS se extraen y persisten: URL (clave de deduplicación), título, resumen, fecha de publicación y canal de origen.</li>
+<li><strong>RF-04.3</strong>: Si un canal falla, el sistema registra el error en logs y continúa con los demás canales sin interrumpir el proceso.</li>
+<li><strong>RF-04.4</strong>: Las noticias ya procesadas no se vuelven a insertar (deduplicación por URL única).</li>
+</ul>
+<h2 id="rf-05-clasificacion-de-informacion-iptc">RF-05 Clasificación de Información (IPTC)</h2>
+<p>Las noticias detectadas deben clasificarse bajo una categoría IPTC Media Topics de primer nivel.</p>
+<ul>
+<li><strong>RF-05.1</strong>: Todas las categorías del sistema pertenecen al estándar IPTC Media Topics de primer nivel.</li>
+<li><strong>RF-05.2</strong>: El sistema rechaza la creación de alertas o fuentes con categorías que no pertenezcan al primer nivel IPTC.</li>
+<li><strong>RF-05.3</strong>: La categoría de una noticia se toma de la alerta que la detectó o, en su defecto, de la categoría del canal RSS origen.</li>
+<li><strong>RF-05.4</strong>: El seeder inicial carga todas las categorías IPTC de primer nivel en la base de datos.</li>
+</ul>
+<h2 id="rf-06-matching-de-noticias">RF-06 Matching de Noticias</h2>
+<p>El sistema debe comparar el contenido de las noticias recuperadas con los descriptores de las alertas activas.</p>
+<ul>
+<li><strong>RF-06.1</strong>: Por cada alerta activa, el sistema compara título y resumen de cada noticia con todos los descriptores de la alerta.</li>
+<li><strong>RF-06.2</strong>: Si se detecta coincidencia, se registra el match indicando qué descriptor lo produjo.</li>
+<li><strong>RF-06.3</strong>: El matcher es una función pura sin efectos secundarios, ubicada en <code>/core</code> para evitar dependencias circulares.</li>
+<li><strong>RF-06.4</strong>: El sistema evita notificaciones duplicadas mediante restricción única (<code>alert_id</code>, <code>news_item_id</code>) en base de datos.</li>
+</ul>
+<h2 id="rf-07-gestion-de-notificaciones">RF-07 Gestión de Notificaciones</h2>
+<p>El sistema debe notificar a los usuarios de las noticias detectadas tanto de forma interna como por correo electrónico.</p>
+<ul>
+<li><strong>RF-07.1</strong>: Cuando se detecta un match, el sistema crea automáticamente una notificación interna en el buzón del usuario.</li>
+<li><strong>RF-07.2</strong>: El sistema envía un correo electrónico al usuario con el asunto: "Actualización de <code>&lt;alerta&gt;</code> en <code>&lt;día/hora&gt;</code>".</li>
+<li><strong>RF-07.3</strong>: El cuerpo del correo incluye: origen de la noticia, medio, fecha y hora, título de la noticia y resumen del RSS.</li>
+<li><strong>RF-07.4</strong>: El sistema no genera notificaciones duplicadas para la misma combinación alerta–noticia.</li>
+<li><strong>RF-07.5</strong>: El usuario puede consultar su buzón interno de notificaciones.</li>
+<li><strong>RF-07.6</strong>: El usuario puede marcar notificaciones individuales como leídas.</li>
+<li><strong>RF-07.7</strong>: Un fallo en el envío de correo no impide la persistencia de la notificación interna ni bloquea el proceso de monitorización.</li>
+</ul>
+<h2 id="rf-08-panel-de-estadisticas">RF-08 Panel de Estadísticas</h2>
+<p>El sistema debe ofrecer un panel de mando con métricas globales del sistema actualizadas en tiempo real.</p>
+<ul>
+<li><strong>RF-08.1</strong>: El panel muestra: número total de fuentes activas, número de canales RSS, número de noticias procesadas, número de alertas activas.</li>
+<li><strong>RF-08.2</strong>: El panel muestra la distribución de noticias por categoría IPTC.</li>
+<li><strong>RF-08.3</strong>: El panel muestra la distribución de alertas por categoría IPTC.</li>
+<li><strong>RF-08.4</strong>: Los datos se obtienen del backend mediante un único endpoint agregado (<code>/stats/dashboard</code>) para minimizar las peticiones del frontend.</li>
+<li><strong>RF-08.5</strong>: Los datos son dinámicos (no hardcodeados) y reflejan el estado real de la base de datos.</li>
+</ul>
+<h2 id="rf-09-nube-de-palabras-por-categoria">RF-09 Nube de Palabras por Categoría</h2>
+<p>El sistema debe analizar el contenido textual de las noticias y
+visualizar los términos más frecuentes por categoría.</p>
+<ul>
+<li><strong>RF-09.1</strong>: Para cada categoría IPTC, el sistema calcula la frecuencia de términos a partir de títulos y resúmenes de las noticias procesadas.</li>
+<li><strong>RF-09.2</strong>: El sistema aplica limpieza de texto: decodificación de entidades HTML, eliminación de etiquetas, URLs, stopwords en español e inglés y ruido técnico de RSS.</li>
+<li><strong>RF-09.3</strong>: La visualización representa los términos con tamaño de fuente proporcional a su frecuencia.</li>
+<li><strong>RF-09.4</strong>: Se muestra una nube global y nubes individuales por categoría.</li>
+</ul>
+<h2 id="rf-10-gestion-de-fuentes-de-informacion-y-canales-rss">RF-10 Gestión de Fuentes de Información y Canales RSS</h2>
+<p>El sistema debe mantener un catálogo de fuentes de información y canales RSS categorizados.</p>
+<ul>
+<li><strong>RF-10.1</strong>: Un gestor puede añadir fuentes de información asociadas a un medio de comunicación.</li>
+<li><strong>RF-10.2</strong>: Un gestor puede añadir canales RSS a una fuente, especificando URL y categoría IPTC de primer nivel.</li>
+<li><strong>RF-10.3</strong>: El sistema incluye un seeder con un mínimo de 100 canales RSS de 10 medios distintos, cubriendo al menos 1 canal por categoría IPTC de primer nivel.</li>
+<li><strong>RF-10.4</strong>: Los canales RSS se pueden filtrar por categoría en la interfaz de gestión.</li>
+<li><strong>RF-10.5</strong>: El gestor puede eliminar fuentes y canales RSS del sistema.</li>
+</ul>
+<h1 id="requisitos-no-funcionales">Requisitos no funcionales</h1>
+<h2 id="rnf-01-arquitectura-modular">RNF-01 Arquitectura Modular</h2>
+<ul>
+<li><strong>RNF-01.1</strong>: El backend se organiza por features (módulos de dominio), con separación clara entre router, service, schemas y modelos de datos.</li>
+<li><strong>RNF-01.2</strong>: El frontend se organiza en vistas, componentes, stores (Pinia) y capa de API.</li>
+<li><strong>RNF-01.3</strong>: La lógica transversal (matcher, scheduler) reside en <code>/core</code> para evitar dependencias circulares.</li>
+<li><strong>RNF-01.4</strong>: Cada módulo debe poder ser desarrollado, testeado y desplegado de forma independiente.</li>
+</ul>
+<h2 id="rnf-02-despliegue-reproducible">RNF-02 Despliegue Reproducible</h2>
+<ul>
+<li><strong>RNF-02.1</strong>: El sistema completo (backend, frontend, base de datos) se despliega mediante docker-compose up --build en un único comando.</li>
+<li><strong>RNF-02.2</strong>: No se requiere intervención manual adicional para construir, probar y ejecutar el sistema en una máquina limpia.</li>
+<li><strong>RNF-02.3</strong>: Las variables sensibles (claves API, credenciales SMTP) se gestionan mediante <code>.env</code>.</li>
+<li><strong>RNF-02.4</strong>: El sistema define los entornos de desarrollo y producción de forma diferenciada.</li>
+</ul>
+<h2 id="rnf-03-integracion-y-entrega-continua-cicd">RNF-03 Integración y Entrega Continua (CI/CD)</h2>
+<ul>
+<li><strong>RNF-03.1</strong>: El repositorio tiene configurado un pipeline de CI/CD en GitHub Actions.</li>
+<li><strong>RNF-03.2</strong>: El pipeline ejecuta automáticamente los tests en cada push o pull request.</li>
+<li><strong>RNF-03.3</strong>: El pipeline genera informe de cobertura de código.</li>
+<li><strong>RNF-03.4</strong>: El pipeline verifica la calidad del código.</li>
+<li><strong>RNF-03.5</strong>: El pipeline construye la imagen Docker y valida que el sistema arranca correctamente.</li>
+<li><strong>RNF-03.6</strong>: El repositorio tiene ramas configuradas apropiadamente con política de merges definida.</li>
+</ul>
+<h2 id="rnf-04-calidad-del-software-tests">RNF-04 Calidad del Software (Tests)</h2>
+<ul>
+<li><strong>RNF-04.1</strong>: El sistema cuenta con tests unitarios de la lógica de negocio.</li>
+<li><strong>RNF-04.2</strong>: El sistema cuenta con tests funcionales de los endpoints API.</li>
+<li><strong>RNF-04.3</strong>: Los tests cubren tanto casos positivos como negativos.</li>
+<li><strong>RNF-04.4</strong>: Se define una estrategia de cobertura con un porcentaje mínimo objetivo por módulo.</li>
+<li><strong>RNF-04.5</strong>: Los tests están organizados en <code>/tests/unit/</code> y <code>/tests/functional/</code>, separando ambas categorías.</li>
+<li><strong>RNF-04.6</strong>: Opcionalmente, se incluyen pruebas de rendimiento.</li>
+</ul>
+<h2 id="rnf-05-api-rest-documentada-con-openapi">RNF-05 API REST documentada con OpenAPI</h2>
+<ul>
+<li><strong>RNF-05.1</strong>: Toda la funcionalidad del sistema se expone mediante una API REST.</li>
+<li><strong>RNF-05.2</strong>: La API se documenta automáticamente con OpenAPI (Swagger UI) accesible en <code>/docs</code>.</li>
+<li><strong>RNF-05.3</strong>: La API sigue el contrato definido en el YAML de referencia proporcionado por el enunciado (Anexo I).</li>
+<li><strong>RNF-05.4</strong>: Todos los endpoints están protegidos según su nivel de acceso (ver sección de API).</li>
+</ul>
+<h2 id="rnf-06-procesamiento-asincrono">RNF-06 Procesamiento Asíncrono</h2>
+<ul>
+<li><strong>RNF-06.1</strong>: El sistema ejecuta jobs periódicos de monitorización RSS.</li>
+<li><strong>RNF-06.2</strong>: La periodicidad de cada alerta se configura mediante una expresión cron.</li>
+<li><strong>RNF-06.3</strong>: El scheduler se inicia y detiene con el ciclo de vida de la aplicación.</li>
+<li><strong>RNF-06.4</strong>: Al crear, actualizar o eliminar una alerta, el job correspondiente se registra, actualiza o cancela automáticamente en el scheduler.</li>
+<li><strong>RNF-06.5</strong>: El sistema gestiona condiciones de carrera en escrituras concurrentes.</li>
+</ul>
+<h2 id="rnf-07-metricas-de-calidad-de-codigo">RNF-07 Métricas de Calidad de Código</h2>
+<ul>
+<li><strong>RNF-07.1</strong>: El proyecto integra una herramienta de análisis de calidad de código.</li>
+<li><strong>RNF-07.2</strong>: Se reportan métricas de cobertura, deuda técnica, duplicidades y vulnerabilidades.</li>
+<li><strong>RNF-07.3</strong>: El informe de calidad es accesible para el equipo docente.</li>
+</ul>
+<h2 id="rnf-08-documentacion-tecnica-y-adrs">RNF-08 Documentación Técnica y ADRs</h2>
+<ul>
+<li><strong>RNF-08.1</strong>: La documentación está versionada junto al código en el repositorio.</li>
+<li><strong>RNF-08.2</strong>: Se mantienen Architecture Decision Records (ADRs) en <code>/docs/adr/</code> para las decisiones de diseño relevantes.</li>
+<li><strong>RNF-08.3</strong>: La documentación mantiene trazabilidad con requisitos, componentes y pruebas.</li>
+<li><strong>RNF-08.4</strong>: Se documentan los prompts de IA utilizados durante el desarrollo.</li>
+<li><strong>RNF-08.5</strong>: La documentación se genera automáticamente cuando es posible.</li>
+</ul>
+<h1 id="matriz-de-trazabilidad">Matriz de trazabilidad</h1>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 30%" />
+<col style="width: 9%" />
+<col style="width: 19%" />
+<col style="width: 13%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr>
+<th><strong>ID</strong></th>
+<th><strong>Requisito</strong></th>
+<th><strong>Objetivo</strong></th>
+<th><strong>Dependencias</strong></th>
+<th><strong>Sprint</strong></th>
+<th><strong>Estado</strong></th>
+</tr>
+<tr>
+<th><strong>RF-01</strong></th>
+<th>Gestión de usuarios</th>
+<th style="text-align: center;">Obj. 5</th>
+<th>RNF-01 RNF-02</th>
+<th style="text-align: center;">Sprint 1–3</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<th><strong>RF-02</strong></th>
+<th>Gestión de alertas</th>
+<th style="text-align: center;">Obj. 1</th>
+<th>RNF-01 RNF-05</th>
+<th style="text-align: center;">Sprint 2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RF-03</strong></th>
+<th>Sugerencias IA (Gemini)</th>
+<th style="text-align: center;">Obj. 1</th>
+<th>RNF-04</th>
+<th style="text-align: center;">Sprint 2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RF-04</strong></th>
+<th>Monitorización RSS</th>
+<th style="text-align: center;">Obj. 1 4</th>
+<th>RNF-03 RNF-05</th>
+<th style="text-align: center;">Sprint 2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RF-05</strong></th>
+<th>Clasificación IPTC</th>
+<th style="text-align: center;">Obj. 2</th>
+<th>RNF-01</th>
+<th style="text-align: center;">Sprint 2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RF-06</strong></th>
+<th>Matching de noticias</th>
+<th style="text-align: center;">Obj. 1 2</th>
+<th>RNF-03 RNF-05</th>
+<th style="text-align: center;">Sprint 2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RF-07</strong></th>
+<th>Gestión de notificaciones</th>
+<th style="text-align: center;">Obj. 3</th>
+<th>RNF-03 RNF-05</th>
+<th style="text-align: center;">Sprint 2–3</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RF-08</strong></th>
+<th>Panel de estadísticas</th>
+<th style="text-align: center;">Obj. 6b</th>
+<th>RNF-01</th>
+<th style="text-align: center;">Sprint 3</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RF-09</strong></th>
+<th>Nube de palabras</th>
+<th style="text-align: center;">Obj. 6a</th>
+<th>RNF-01</th>
+<th style="text-align: center;">Sprint 3</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RF-10</strong></th>
+<th>Gestión de fuentes RSS</th>
+<th style="text-align: center;">Obj. 4</th>
+<th>RNF-01 RNF-05</th>
+<th style="text-align: center;">Sprint 1–2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<th><strong>RNF-01</strong></th>
+<th>Arquitectura modular</th>
+<th style="text-align: center;">—</th>
+<th>Todos los RF</th>
+<th style="text-align: center;">Sprint 1</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RNF-02</strong></th>
+<th>Despliegue reproducible</th>
+<th style="text-align: center;">—</th>
+<th>RNF-01</th>
+<th style="text-align: center;">Sprint 1</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RNF-03</strong></th>
+<th>CI/CD automatizado</th>
+<th style="text-align: center;">—</th>
+<th>RNF-01 RNF-04</th>
+<th style="text-align: center;">Sprint 1–2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RNF-04</strong></th>
+<th>Calidad software (tests)</th>
+<th style="text-align: center;">—</th>
+<th>RNF-03</th>
+<th style="text-align: center;">Sprint 2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RNF-05</strong></th>
+<th>API REST + OpenAPI</th>
+<th style="text-align: center;">Obj. 6</th>
+<th>Todos los RF</th>
+<th style="text-align: center;">Sprint 1</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RNF-06</strong></th>
+<th>Procesamiento asíncrono</th>
+<th style="text-align: center;">Obj. 1</th>
+<th>RF-05 RF-07 RF-08</th>
+<th style="text-align: center;">Sprint 2</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RNF-07</strong></th>
+<th>Métricas calidad código</th>
+<th style="text-align: center;">—</th>
+<th>RNF-03</th>
+<th style="text-align: center;">Sprint 4</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+<tr>
+<th><strong>RNF-08</strong></th>
+<th>ADRs en repositorio</th>
+<th style="text-align: center;">—</th>
+<th>Todos los RF</th>
+<th style="text-align: center;">Sprint 2-4</th>
+<th style="text-align: center;"><strong>Completo</strong></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

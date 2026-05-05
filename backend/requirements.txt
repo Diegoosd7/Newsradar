@@ -11,3 +11,7 @@ apscheduler==3.10.4
 torch==2.11.0
 transformers==4.55.4
 locust
+mkdocs>=1.6,<2.0
+mkdocs-material>=9.5,<9.7.0
+mkdocs-with-pdf>=0.9,<1.0
+mkdocs-mermaid2-plugin
