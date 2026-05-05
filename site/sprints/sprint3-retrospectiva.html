@@ -1,0 +1,1171 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="sprint2-retrospectiva.html">
+      
+      
+        <link rel="next" href="../adr/0001-lenguaje-backend.html">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+    
+    
+      
+        <title>Sprint 3 - NewsRadar Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.84d31ad4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#retrospectiva-sprint-3-panel-de-mando-y-notificaciones" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="NewsRadar Docs" class="md-header__button md-logo" aria-label="NewsRadar Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NewsRadar Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sprint 3
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="NewsRadar Docs" class="md-nav__button md-logo" aria-label="NewsRadar Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    NewsRadar Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../requerimientos.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Requerimientos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-prompts.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Prompts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Diagramas de arquitectura
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Diagramas de arquitectura
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagrams/diagrama-entidad-relacion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Entidad-Relación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Retrospectivas sprints
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Retrospectivas sprints
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sprint1-retrospectiva.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sprint2-retrospectiva.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Sprint 3
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="sprint3-retrospectiva.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 3
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-del-sprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objetivos del sprint
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-salio-bien" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué salió bien
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trabajo-realizado-por-cada-miembro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trabajo realizado por cada miembro
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problemas-encontrados-y-como-se-resolvieron" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problemas encontrados y cómo se resolvieron
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-mejorariamos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué mejoraríamos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estado-al-final-del-sprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estado al final del sprint
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decisiones-tecnicas-tomadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisiones técnicas tomadas
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0001-lenguaje-backend.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0001-lenguaje-backend
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0002-framework-frontend.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0002-framework-frontend
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0003-gestor-bd.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0003-gestor-bd
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0004-arquitectura-software.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0004-arquitectura-software
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0005-framework-api-rest.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0005-framework-api-rest
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0006-orm.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0006-orm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0007-tests-api-rest.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0007-tests-api-rest
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0008-fetch-nativo-vs-axios.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0008-fetch-nativo-vs-axios
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0009-pinia-localstorage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0009-pinia-localstorage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0010-flujo-login-tres-pasos.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0010-flujo-login-tres-pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0011-rol-lector-por-defecto.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0011-rol-lector-por-defecto
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adr/0012-mock-recuperacion-contrasena.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0012-mock-recuperacion-contrasena.md
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-del-sprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objetivos del sprint
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-salio-bien" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué salió bien
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trabajo-realizado-por-cada-miembro" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trabajo realizado por cada miembro
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problemas-encontrados-y-como-se-resolvieron" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problemas encontrados y cómo se resolvieron
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#que-mejorariamos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Qué mejoraríamos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estado-al-final-del-sprint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estado al final del sprint
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decisiones-tecnicas-tomadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisiones técnicas tomadas
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="retrospectiva-sprint-3-panel-de-mando-y-notificaciones">Retrospectiva Sprint 3 — Panel de Mando y Notificaciones</h1>
+<p><strong>Periodo:</strong> 8 – 21 de abril de 2026<br />
+<strong>Equipo:</strong> María, Marcos, Lucía, Diego, Gonzalo, Pablo, Íñigo</p>
+<hr />
+<h2 id="objetivos-del-sprint">Objetivos del sprint</h2>
+<ul>
+<li>Desarrollar el esqueleto del frontend en Vue 3 con TypeScript</li>
+<li>Construir el panel de mando con estadísticas globales y nubes de palabras por categoría</li>
+<li>Implementar las pantallas de gestión de perfil de usuario (edición, recuperación de contraseña)</li>
+<li>Configurar el envío de notificaciones por correo electrónico y buzón de la aplicación</li>
+<li>Implementar el correo de verificación de cuenta con caducidad de 24 horas</li>
+</ul>
+<hr />
+<h2 id="que-salio-bien">Qué salió bien</h2>
+<ul>
+<li>La arquitectura del frontend en Vue 3 con Pinia quedó bien estructurada, facilitando el trabajo en paralelo.</li>
+<li>El sistema de guardas de navegación por rol (GESTOR / LECTOR) funcionó correctamente: los lectores no pueden acceder a <code>/alertas</code>, <code>/fuentes-y-rss</code> ni <code>/admin</code>.</li>
+<li>Las estadísticas globales del dashboard se conectaron con datos reales del backend mediante un único endpoint agregado, evitando múltiples peticiones desde el frontend.</li>
+<li>El flujo completo de registro, verificación de email, login y visualización del estado de verificación quedó operativo de extremo a extremo.</li>
+<li>La nube de palabras por categoría se implementó con análisis textual real (decodificación HTML, eliminación de stopwords en ES e inglés, normalización).</li>
+<li>El seeder quedó operativo para poblar la BD con categorías IPTC, fuentes y canales RSS iniciales.</li>
+</ul>
+<hr />
+<h2 id="trabajo-realizado-por-cada-miembro">Trabajo realizado por cada miembro</h2>
+<p><strong>María — Arquitectura e interfaz inicial frontend</strong></p>
+<ul>
+<li>Estructura general de componentes, vistas y tipos de acuerdo a los requerimientos del sistema.</li>
+<li>Diseño y maquetación de la interfaz para una demostración de las funcionalidades del sistema clara y una interacción fluida.</li>
+<li>Implementación del router para la segmentación de la aplicación en páginas.</li>
+<li>Planteamiento inicial para la conexión entre frontend y endpoints del backend.</li>
+</ul>
+<p><strong>Marcos y Lucía — Autenticación y gestión de usuario</strong></p>
+<ul>
+<li>Proxy de desarrollo en <code>vite.config.ts</code> para evitar errores CORS (redirige <code>/api</code> a <code>http://localhost:8000</code>).</li>
+<li>Capa de tipos TypeScript (<code>src/api/types.ts</code>): interfaces <code>LoginRequest</code>, <code>TokenResponse</code>, <code>RegisterRequest</code>, <code>UserResponse</code>, <code>UserUpdateRequest</code>, <code>RoleResponse</code>.</li>
+<li>Composable HTTP centralizado (<code>src/api/useApiCall.ts</code>) con <code>fetch</code> nativo: función genérica <code>handleResponse&lt;T&gt;</code> y auxiliar <code>authHeaders()</code>.</li>
+<li>Store de autenticación con Pinia (<code>src/stores/auth.ts</code>): persistencia en localStorage, login en tres pasos con <code>Promise.all</code> (token + usuario + rol), rol LECTOR por defecto si el usuario no tiene rol asignado.</li>
+<li>Guardas de navegación (<code>src/router/index.ts</code>): rutas marcadas con <code>meta: { public }</code> y <code>meta: { requiresGestor }</code>.</li>
+<li><code>LoginForm.vue</code> y <code>RegisterForm.vue</code> reescritos y conectados con la API real.</li>
+<li><code>ForgotPasswordForm.vue</code>: UI completa con mock de 800 ms mientras el endpoint backend no estaba disponible.</li>
+<li><code>PersonalInfo.vue</code>: edición de perfil (<code>PUT /api/v1/users/{id}</code>) y borrado de cuenta (<code>DELETE</code>) con confirmación.</li>
+<li><code>AccountInfo.vue</code>: muestra el rol real y el estado de verificación real desde el store.</li>
+<li>Fix en <code>App.vue</code>: navbar condicional y logout que limpia el store y redirige al login.</li>
+</ul>
+<p><strong>Pablo e Íñigo — Estadísticas globales y nube de palabras</strong></p>
+<ul>
+<li>Nuevo endpoint agregado de estadísticas en backend: devuelve en una sola respuesta fuentes, RSS, noticias, alertas, noticias por categoría, alertas por categoría y palabras destacadas por categoría.</li>
+<li>Procesamiento de texto para la nube: decodificación de entidades HTML, eliminación de etiquetas HTML y URLs, filtrado de stopwords en ES e inglés, normalización de texto.</li>
+<li>Componentes frontend: <code>StatsView.vue</code>, <code>PerCategoryStat.vue</code>, <code>TotalNumberStat.vue</code>, <code>WordCloudView.vue</code>, <code>WordCloudItem.vue</code>.</li>
+<li>Corrección del <code>seeder.py</code> para que cargue correctamente categorías IPTC, fuentes y canales RSS con la estructura actual del proyecto.</li>
+<li>Ajuste del flujo de notificaciones para que el fallo de envío de correo no bloquee la persistencia de la notificación interna.</li>
+</ul>
+<p><strong>Diego — Flujo de recuperación de contraseña y fix de verificación</strong></p>
+<ul>
+<li>Nuevo componente <code>ResetPasswordView.vue</code>: lee el token de la URL, pide la nueva contraseña y se comunica con el backend.</li>
+<li>Nueva ruta pública <code>/reset-password</code> añadida en <code>router/index.ts</code>.</li>
+<li>Fix crítico en <code>service.py</code> (función <code>verify_email</code>): se añadió <code>self.db.commit()</code> para que el cambio a <code>is_verified = True</code> sea permanente en <code>news.db</code>.</li>
+<li><code>UserResponse</code> actualizado con campo <code>is_verified: bool = False</code> y <code>model_config = {"from_attributes": True}</code> para compatibilidad con SQLAlchemy.</li>
+<li>Endpoint de login modificado para devolver el objeto <code>user</code> completo junto con el <code>access_token</code>, eliminando la llamada secundaria a <code>getUsers</code> en el frontend.</li>
+<li><code>AccountInfo.vue</code>: el badge de verificación ahora es reactivo — desaparece automáticamente al iniciar sesión tras verificar la cuenta.</li>
+</ul>
+<hr />
+<h2 id="problemas-encontrados-y-como-se-resolvieron">Problemas encontrados y cómo se resolvieron</h2>
+<ul>
+<li><strong>Errores CORS en desarrollo:</strong> las llamadas del frontend al backend fallaban. Se resolvió configurando un proxy en <code>vite.config.ts</code> y añadiendo los headers CORS correctos en FastAPI.</li>
+<li><strong>Fallo SMTP bloqueando el registro:</strong> si el servidor SMTP no estaba disponible, el endpoint de registro devolvía error 500. Se refactorizó el servicio para capturar la excepción y continuar el registro con un warning en logs.</li>
+<li><strong>Pérdida de sesión al recargar la página:</strong> el store de Pinia perdía el token. Se resolvió con persistencia en localStorage mediante <code>pinia-plugin-persistedstate</code> (ver ADR-0009).</li>
+<li><strong>Endpoint de recuperación de contraseña no implementado:</strong> se implementó un mock en el frontend con comentario indicando dónde conectar la llamada real (ver ADR-0012).</li>
+<li><strong>Desincronización del estado de verificación:</strong> el frontend sobreescribía <code>is_verified</code> con una llamada secundaria que no traía ese campo. Se resolvió devolviendo el usuario completo en la respuesta del login y extrayendo <code>is_verified</code> directamente en el store de Pinia.</li>
+<li><strong><code>verify_email</code> no persistía el cambio en BD:</strong> faltaba <code>db.commit()</code> tras actualizar <code>is_verified</code>. Corregido por Diego.</li>
+<li><strong>Calidad del texto en la nube de palabras:</strong> los feeds RSS incluían HTML embebido, entidades y ruido técnico. Se añadió una pipeline de limpieza antes de la tokenización.</li>
+</ul>
+<hr />
+<h2 id="que-mejorariamos">Qué mejoraríamos</h2>
+<ul>
+<li>Acordar antes del sprint el contrato de la API entre frontend y backend para evitar bloqueos por desincronización.</li>
+<li>Empezar antes con las pruebas de componentes Vue — quedaron pendientes para el Sprint 4.</li>
+<li>Completar el endpoint real de recuperación de contraseña en el backend.</li>
+<li>Mejorar la nube de palabras con lematización (spaCy) y ponderación TF-IDF.</li>
+</ul>
+<hr />
+<h2 id="estado-al-final-del-sprint">Estado al final del sprint</h2>
+<table>
+<thead>
+<tr>
+<th>Tarea</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Esqueleto frontend Vue 3 con Pinia</td>
+<td>✅ Completado</td>
+</tr>
+<tr>
+<td>Panel de mando con estadísticas globales</td>
+<td>✅ Completado</td>
+</tr>
+<tr>
+<td>Nube de palabras por categoría</td>
+<td>✅ Completado</td>
+</tr>
+<tr>
+<td>Gestión de perfil de usuario</td>
+<td>✅ Completado</td>
+</tr>
+<tr>
+<td>Recuperación de contraseña</td>
+<td>⚠️ Mock funcional en frontend, endpoint backend pendiente</td>
+</tr>
+<tr>
+<td>Notificaciones por email</td>
+<td>✅ Completado</td>
+</tr>
+<tr>
+<td>Buzón de notificaciones en app</td>
+<td>✅ Completado</td>
+</tr>
+<tr>
+<td>Correo de verificación con caducidad 24h</td>
+<td>✅ Completado</td>
+</tr>
+<tr>
+<td>Fix verificación email (db.commit)</td>
+<td>✅ Corregido</td>
+</tr>
+<tr>
+<td>Seeder operativo</td>
+<td>✅ Completado</td>
+</tr>
+<tr>
+<td>Pruebas de componentes frontend</td>
+<td>❌ Pospuesto al Sprint 4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="decisiones-tecnicas-tomadas">Decisiones técnicas tomadas</h2>
+<ul>
+<li>Fetch nativo en lugar de Axios para llamadas HTTP (ver ADR-0008)</li>
+<li>Pinia con persistencia en localStorage para mantener sesión (ver ADR-0009)</li>
+<li>Login en tres pasos con <code>Promise.all</code> para resolver token, usuario y rol en paralelo (ver ADR-0010)</li>
+<li>Rol LECTOR asignado por defecto a usuarios sin rol explícito (ver ADR-0011)</li>
+<li>Mock del endpoint de recuperación de contraseña en frontend hasta implementación backend (ver ADR-0012)</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>

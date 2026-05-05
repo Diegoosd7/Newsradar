@@ -1,0 +1,1208 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="requerimientos.html">
+      
+      
+        <link rel="next" href="diagrams/diagrama-entidad-relacion.html">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+    
+    
+      
+        <title>Prompts - NewsRadar Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.84d31ad4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#registro-de-prompts-de-ia-newsradar" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="NewsRadar Docs" class="md-header__button md-logo" aria-label="NewsRadar Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            NewsRadar Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Prompts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="NewsRadar Docs" class="md-nav__button md-logo" aria-label="NewsRadar Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    NewsRadar Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Inicio
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="requerimientos.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Requerimientos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Prompts
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="ai-prompts.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Prompts
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sprint-1-infraestructura-api-base-y-fuentes-rss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sprint 1 — Infraestructura, API Base y Fuentes RSS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprint-2-alertas-clasificacion-y-procesamiento-continuo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sprint 2 — Alertas, Clasificación y Procesamiento Continuo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprint-3-panel-de-mando-y-notificaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sprint 3 — Panel de Mando y Notificaciones
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprint-4-cicd-documentacion-y-refinamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sprint 4 — CI/CD, Documentación y Refinamiento
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notas
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Diagramas de arquitectura
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Diagramas de arquitectura
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="diagrams/diagrama-entidad-relacion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Entidad-Relación
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Retrospectivas sprints
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Retrospectivas sprints
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sprints/sprint1-retrospectiva.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sprints/sprint2-retrospectiva.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sprints/sprint3-retrospectiva.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sprint 3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    ADR
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            ADR
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0001-lenguaje-backend.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0001-lenguaje-backend
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0002-framework-frontend.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0002-framework-frontend
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0003-gestor-bd.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0003-gestor-bd
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0004-arquitectura-software.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0004-arquitectura-software
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0005-framework-api-rest.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0005-framework-api-rest
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0006-orm.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0006-orm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0007-tests-api-rest.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0007-tests-api-rest
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0008-fetch-nativo-vs-axios.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0008-fetch-nativo-vs-axios
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0009-pinia-localstorage.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0009-pinia-localstorage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0010-flujo-login-tres-pasos.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0010-flujo-login-tres-pasos
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0011-rol-lector-por-defecto.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0011-rol-lector-por-defecto
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="adr/0012-mock-recuperacion-contrasena.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    0012-mock-recuperacion-contrasena.md
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sprint-1-infraestructura-api-base-y-fuentes-rss" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sprint 1 — Infraestructura, API Base y Fuentes RSS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprint-2-alertas-clasificacion-y-procesamiento-continuo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sprint 2 — Alertas, Clasificación y Procesamiento Continuo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprint-3-panel-de-mando-y-notificaciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sprint 3 — Panel de Mando y Notificaciones
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sprint-4-cicd-documentacion-y-refinamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sprint 4 — CI/CD, Documentación y Refinamiento
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Notas
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="registro-de-prompts-de-ia-newsradar">Registro de Prompts de IA — NewsRadar</h1>
+<p>Este documento recoge los prompts utilizados con herramientas de IA generativa
+durante el desarrollo del proyecto NewsRadar, cumpliendo con el requisito de
+trazabilidad de la asignatura.</p>
+<p><strong>Herramientas utilizadas:</strong> ChatGPT (OpenAI), Claude (Anthropic), Gemini (Google)</p>
+<hr />
+<h2 id="sprint-1-infraestructura-api-base-y-fuentes-rss">Sprint 1 — Infraestructura, API Base y Fuentes RSS</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Herramienta</th>
+<th>Tarea</th>
+<th>Prompt utilizado</th>
+<th>Resultado / Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-S1-01</td>
+<td>ChatGPT</td>
+<td>Estructura del proyecto FastAPI</td>
+<td>"Genera una estructura de carpetas para un proyecto FastAPI con arquitectura por dominios (features), SQLAlchemy y autenticación JWT"</td>
+<td>Base de la estructura <code>backend/app/features/</code></td>
+</tr>
+<tr>
+<td>P-S1-02</td>
+<td>Claude</td>
+<td>Modelos SQLAlchemy</td>
+<td>"Genera los modelos SQLAlchemy para un sistema de usuarios con roles, canales RSS y categorías IPTC. Usa SQLite como base de datos"</td>
+<td>Base de <code>backend/app/db/models.py</code></td>
+</tr>
+<tr>
+<td>P-S1-03</td>
+<td>ChatGPT</td>
+<td>Docker Compose</td>
+<td>"Crea un docker-compose.yml para un backend FastAPI con Python 3.11 y un frontend Vue 3 con Vite, incluyendo hot-reload en desarrollo"</td>
+<td>Base de <code>docker-compose.yml</code></td>
+</tr>
+<tr>
+<td>P-S1-04</td>
+<td>Gemini</td>
+<td>Canales RSS IPTC</td>
+<td>"Lista 100 canales RSS de medios de comunicación españoles organizados por las categorías de primer nivel de IPTC Media Topics"</td>
+<td>Datos para <code>backend/app/seeder.py</code></td>
+</tr>
+<tr>
+<td>P-S1-05</td>
+<td>Claude</td>
+<td>GitHub Actions CI</td>
+<td>"Crea un pipeline de GitHub Actions para un proyecto Python con FastAPI que ejecute pytest con cobertura y construya una imagen Docker"</td>
+<td>Base de <code>.github/workflows/ci.yml</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sprint-2-alertas-clasificacion-y-procesamiento-continuo">Sprint 2 — Alertas, Clasificación y Procesamiento Continuo</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Herramienta</th>
+<th>Tarea</th>
+<th>Prompt utilizado</th>
+<th>Resultado / Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-S2-01</td>
+<td>ChatGPT</td>
+<td>Motor RSS con feedparser</td>
+<td>"Implementa en Python un servicio que consuma canales RSS con feedparser, filtre noticias por palabras clave y las almacene en SQLite con SQLAlchemy"</td>
+<td>Base del motor de extracción RSS</td>
+</tr>
+<tr>
+<td>P-S2-02</td>
+<td>Claude</td>
+<td>Expansión de palabras clave con IA</td>
+<td>"Dado un término de búsqueda en español, genera entre 3 y 10 sinónimos o palabras relacionadas usando la API de OpenAI. Devuelve solo la lista en JSON"</td>
+<td>Lógica de recomendación de descriptores en alertas</td>
+</tr>
+<tr>
+<td>P-S2-03</td>
+<td>Gemini</td>
+<td>Clasificación IPTC</td>
+<td>"Dado el título y resumen de una noticia en español, clasifícala en una de las siguientes categorías IPTC de primer nivel: [lista]. Responde solo con el nombre de la categoría"</td>
+<td>Sistema de clasificación IPTC</td>
+</tr>
+<tr>
+<td>P-S2-04</td>
+<td>ChatGPT</td>
+<td>Tarea cron con APScheduler</td>
+<td>"Implementa una tarea periódica en FastAPI usando APScheduler que ejecute una función cada X minutos definido por una expresión cron almacenada en base de datos"</td>
+<td>Proceso continuo de monitorización de alertas</td>
+</tr>
+<tr>
+<td>P-S2-05</td>
+<td>Claude</td>
+<td>Pruebas unitarias FastAPI</td>
+<td>"Genera tests con pytest para los endpoints FastAPI de gestión de alertas, usando TestClient y una base de datos SQLite en memoria"</td>
+<td>Base de <code>tests/test_alerts.py</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sprint-3-panel-de-mando-y-notificaciones">Sprint 3 — Panel de Mando y Notificaciones</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Herramienta</th>
+<th>Tarea</th>
+<th>Prompt utilizado</th>
+<th>Resultado / Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-S3-01</td>
+<td>Claude</td>
+<td>Composable fetch Vue 3</td>
+<td>"Solicitud de patrón composable Vue 3 para centralizar llamadas fetch con manejo genérico de errores"</td>
+<td><code>src/api/useApiCall.ts</code></td>
+</tr>
+<tr>
+<td>P-S3-02</td>
+<td>ChatGPT</td>
+<td>Flujo de login en tres pasos</td>
+<td>"Consulta sobre cómo resolver datos de usuario y rol en paralelo tras obtener el token JWT en Vue 3 con Pinia"</td>
+<td><code>src/stores/auth.ts</code></td>
+</tr>
+<tr>
+<td>P-S3-03</td>
+<td>Claude</td>
+<td>Guardas de navegación por rol</td>
+<td>"Implementación de guardas de ruta con control por rol en Vue Router 4, diferenciando entre GESTOR y LECTOR"</td>
+<td><code>src/router/index.ts</code></td>
+</tr>
+<tr>
+<td>P-S3-04</td>
+<td>ChatGPT</td>
+<td>Nube de palabras con D3.js</td>
+<td>"Genera un componente Vue 3 que muestre una nube de palabras usando D3-cloud a partir de un array de objetos {text, value}"</td>
+<td>Componente de nube de palabras del dashboard</td>
+</tr>
+<tr>
+<td>P-S3-05</td>
+<td>Gemini</td>
+<td>Plantilla de correo de notificación</td>
+<td>"Genera una plantilla HTML para un correo de notificación de alerta con el formato: Actualización de [alerta] en [día/hora], mostrando título, fuente y resumen de la noticia"</td>
+<td>Plantilla de notificaciones por email</td>
+</tr>
+<tr>
+<td>P-S3-06</td>
+<td>Claude</td>
+<td>Fix backend SMTP</td>
+<td>"Consulta sobre cómo evitar que un fallo de email detenga el registro de usuario en FastAPI — manejo de excepciones en envío SMTP"</td>
+<td>Fix en <code>backend/service.py</code></td>
+</tr>
+<tr>
+<td>P-S3-07</td>
+<td>ChatGPT</td>
+<td>Estadísticas globales API</td>
+<td>"Genera un endpoint FastAPI que devuelva estadísticas agregadas: número de fuentes, noticias totales, noticias por categoría, alertas totales y alertas por categoría"</td>
+<td>Endpoint <code>/api/v1/stats</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sprint-4-cicd-documentacion-y-refinamiento">Sprint 4 — CI/CD, Documentación y Refinamiento</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Herramienta</th>
+<th>Tarea</th>
+<th>Prompt utilizado</th>
+<th>Resultado / Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-S4-01</td>
+<td>Claude</td>
+<td>Pruebas de rendimiento Locust</td>
+<td>"Genera un locustfile.py para pruebas de carga de una API REST FastAPI que simule login, consulta de alertas y consulta de noticias con usuarios concurrentes"</td>
+<td><code>tests/locustfile.py</code></td>
+</tr>
+<tr>
+<td>P-S4-02</td>
+<td>ChatGPT</td>
+<td>Informe de cobertura CI</td>
+<td>"Añade al pipeline de GitHub Actions la generación de un informe de cobertura con pytest-cov y la subida del artefacto"</td>
+<td>Mejora de <code>.github/workflows/ci.yml</code></td>
+</tr>
+<tr>
+<td>P-S4-03</td>
+<td>Gemini</td>
+<td>Diagramas de arquitectura Mermaid</td>
+<td>"Genera un diagrama de componentes en formato Mermaid para un sistema con backend FastAPI, frontend Vue 3, SQLite, motor RSS y sistema de notificaciones"</td>
+<td><code>docs/architecture/components.md</code></td>
+</tr>
+<tr>
+<td>P-S4-04</td>
+<td>Claude</td>
+<td>Documento de trazabilidad</td>
+<td>"Genera una tabla de trazabilidad entre requisitos del enunciado, componentes implementados, ADRs y tests para un sistema de monitorización de noticias RSS"</td>
+<td><code>docs/trazabilidad.md</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="notas">Notas</h2>
+<ul>
+<li>Los prompts recogidos son representativos del uso real durante el desarrollo.</li>
+<li>En todos los casos el código generado fue revisado, adaptado y validado por
+  el equipo antes de integrarse en el repositorio.</li>
+<li>El uso de IA se enmarca en la Opción 1 de la política de IA de la asignatura.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
