@@ -1,0 +1,34 @@
+site_name: NewsRadar Docs
+
+use_directory_urls: false
+
+theme:
+  name: material
+
+nav:
+  - Inicio: index.md
+  - Requerimientos: requerimientos.md
+  - Prompts: ai-prompts.md
+  - Diagramas de arquitectura:
+    - Entidad-Relación: diagrams/diagrama-entidad-relacion.md
+  - Retrospectivas sprints:
+    - Sprint 1: sprints/sprint1-retrospectiva.md
+    - Sprint 2: sprints/sprint2-retrospectiva.md
+    - Sprint 3: sprints/sprint3-retrospectiva.md
+  - ADR:
+    - 0001-lenguaje-backend: adr/0001-lenguaje-backend.md
+    - 0002-framework-frontend: adr/0002-framework-frontend.md
+    - 0003-gestor-bd: adr/0003-gestor-bd.md
+    - 0004-arquitectura-software: adr/0004-arquitectura-software.md
+    - 0005-framework-api-rest: adr/0005-framework-api-rest.md
+    - 0006-orm: adr/0006-orm.md
+    - 0007-tests-api-rest: adr/0007-tests-api-rest.md
+    - 0008-fetch-nativo-vs-axios: adr/0008-fetch-nativo-vs-axios.md
+    - 0009-pinia-localstorage: adr/0009-pinia-localstorage.md
+    - 0010-flujo-login-tres-pasos: adr/0010-flujo-login-tres-pasos.md
+    - 0011-rol-lector-por-defecto: adr/0011-rol-lector-por-defecto.md
+    - 0012-mock-recuperacion-contrasena.md: adr/0012-mock-recuperacion-contrasena.md
+
+plugins:
+    - search
+    - mermaid2
