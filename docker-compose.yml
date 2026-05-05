@@ -7,7 +7,35 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - backend-data:/app/data
     environment:
-      - DATABASE_URL=sqlite:///./news.db
-    restart: always
+      - DATABASE_URL=${DATABASE_URL:-sqlite:////app/data/news.db}
+      - DISABLE_SCHEDULER=${DISABLE_SCHEDULER:-0}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - SMTP_FROM=${SMTP_FROM:-}
+      - APP_BASE_URL=${APP_BASE_URL:-http://localhost:8000}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:80}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  frontend:
+    build: ./frontend
+    container_name: newsradar-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  backend-data:
