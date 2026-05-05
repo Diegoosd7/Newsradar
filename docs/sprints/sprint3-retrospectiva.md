@@ -28,7 +28,14 @@
 
 ## Trabajo realizado por cada miembro
 
-**Marcos y Lucía — Autenticación y panel de mando frontend**
+**María — Arquitectura e interfaz inicial frontend**
+
+- Estructura general de componentes, vistas y tipos de acuerdo a los requerimientos del sistema.
+- Diseño y maquetación de la interfaz para una demostración de las funcionalidades del sistema clara y una interacción fluida.
+- Implementación del router para la segmentación de la aplicación en páginas.
+- Planteamiento inicial para la conexión entre frontend y endpoints del backend.
+
+**Marcos y Lucía — Autenticación y gestión de usuario**
 
 - Proxy de desarrollo en `vite.config.ts` para evitar errores CORS (redirige `/api` a `http://localhost:8000`).
 - Capa de tipos TypeScript (`src/api/types.ts`): interfaces `LoginRequest`, `TokenResponse`, `RegisterRequest`, `UserResponse`, `UserUpdateRequest`, `RoleResponse`.
@@ -83,19 +90,19 @@
 
 ## Estado al final del sprint
 
-| Tarea | Estado |
-|-------|--------|
-| Esqueleto frontend Vue 3 con Pinia | ✅ Completado |
-| Panel de mando con estadísticas globales | ✅ Completado |
-| Nube de palabras por categoría | ✅ Completado |
-| Gestión de perfil de usuario | ✅ Completado |
-| Recuperación de contraseña | ⚠️ Mock funcional en frontend, endpoint backend pendiente |
-| Notificaciones por email | ✅ Completado |
-| Buzón de notificaciones en app | ✅ Completado |
-| Correo de verificación con caducidad 24h | ✅ Completado |
-| Fix verificación email (db.commit) | ✅ Corregido |
-| Seeder operativo | ✅ Completado |
-| Pruebas de componentes frontend | ❌ Pospuesto al Sprint 4 |
+| Tarea                                    | Estado                                                    |
+| ---------------------------------------- | --------------------------------------------------------- |
+| Esqueleto frontend Vue 3 con Pinia       | ✅ Completado                                             |
+| Panel de mando con estadísticas globales | ✅ Completado                                             |
+| Nube de palabras por categoría           | ✅ Completado                                             |
+| Gestión de perfil de usuario             | ✅ Completado                                             |
+| Recuperación de contraseña               | ⚠️ Mock funcional en frontend, endpoint backend pendiente |
+| Notificaciones por email                 | ✅ Completado                                             |
+| Buzón de notificaciones en app           | ✅ Completado                                             |
+| Correo de verificación con caducidad 24h | ✅ Completado                                             |
+| Fix verificación email (db.commit)       | ✅ Corregido                                              |
+| Seeder operativo                         | ✅ Completado                                             |
+| Pruebas de componentes frontend          | ❌ Pospuesto al Sprint 4                                  |
 
 ---
 

@@ -63,6 +63,11 @@
 - Uso de `FakeAuthService`, `FakeAlertsService` y `dependency_overrides` para no depender de BD real.
 - Actualización de `requirements.txt` con `httpx` para soporte de FastAPI TestClient en CI.
 
+**María — Documentación y clasificador**
+
+- Redacción de ADRs para reflejar todas las decisiones tomadas hasta el momento.
+- Planteamiento del sistema clasificador de noticias.
+
 ---
 
 ## Problemas encontrados y cómo se resolvieron
@@ -85,21 +90,21 @@
 
 ## Estado al final del sprint
 
-| Tarea | Estado |
-|-------|--------|
-| Motor de extracción RSS (fetcher) | ✅ Completado |
-| Keyword Matcher | ✅ Completado |
-| Monitor Job (cron) con APScheduler | ✅ Completado |
-| Scheduler (ciclo de vida) | ✅ Completado |
-| Lógica de alertas (máx. 20 por usuario) | ✅ Completado |
-| Expansión de palabras clave con Gemini | ✅ Completado |
-| Verificación de email con caducidad 24h | ✅ Completado |
-| Servicio SMTP modular | ✅ Completado |
-| Buzón interno de notificaciones | ✅ Completado |
-| Roles iniciales en BD (admin, gestor, lector) | ✅ Completado |
-| Tests funcionales (health, auth, alerts) | ✅ ~24 tests pasando |
-| Tests unitarios (auth service, alerts service) | ✅ ~19 tests pasando |
-| Tests del resto de módulos | ⚠️ Pospuesto — módulos aún no estables |
+| Tarea                                          | Estado                                 |
+| ---------------------------------------------- | -------------------------------------- |
+| Motor de extracción RSS (fetcher)              | ✅ Completado                          |
+| Keyword Matcher                                | ✅ Completado                          |
+| Monitor Job (cron) con APScheduler             | ✅ Completado                          |
+| Scheduler (ciclo de vida)                      | ✅ Completado                          |
+| Lógica de alertas (máx. 20 por usuario)        | ✅ Completado                          |
+| Expansión de palabras clave con Gemini         | ✅ Completado                          |
+| Verificación de email con caducidad 24h        | ✅ Completado                          |
+| Servicio SMTP modular                          | ✅ Completado                          |
+| Buzón interno de notificaciones                | ✅ Completado                          |
+| Roles iniciales en BD (admin, gestor, lector)  | ✅ Completado                          |
+| Tests funcionales (health, auth, alerts)       | ✅ ~24 tests pasando                   |
+| Tests unitarios (auth service, alerts service) | ✅ ~19 tests pasando                   |
+| Tests del resto de módulos                     | ⚠️ Pospuesto — módulos aún no estables |
 
 ---
 
