@@ -9,6 +9,16 @@ dist/
 build/
 .eggs/
 
+# Cobertura de código
+coverage.xml
+htmlcov/
+.coverage
+.pytest_cache/
+
+# SonarQube
+sonar-scanner/
+.sonarqube/
+
 # Entornos virtuales
 .venv/
 venv/
