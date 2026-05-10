@@ -72,7 +72,7 @@ class NewsRadarUser(HttpUser):
     @task(10)
     def health_check(self):
         """Endpoint público de salud — baseline de latencia."""
-        self.client.get("/api/v1/system/health")
+        self.client.get("/api/v1/health")
 
     @task(6)
     def list_alerts(self):

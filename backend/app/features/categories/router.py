@@ -14,7 +14,7 @@ def get_categories_service(db: Session = Depends(get_db)):
     return CategoriesService(db)
 
 
-@router.get("/", response_model=List[CategoryResponse], tags=["categories"])
+@router.get("", response_model=List[CategoryResponse], tags=["categories"])
 def list_categories(
     _: UserInDB = Depends(get_current_user),
     service: CategoriesService = Depends(get_categories_service),
@@ -23,7 +23,7 @@ def list_categories(
 
 
 @router.post(
-    "/",
+    "",
     response_model=CategoryResponse,
     status_code=201,
     tags=["categories"],

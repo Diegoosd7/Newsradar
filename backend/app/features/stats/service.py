@@ -149,7 +149,9 @@ class StatsService(CommonService):
         )
 
         for metric_item in metrics:
-            metric = Metric(name=metric_item.name, value=metric_item.value)
+            name = metric_item["name"] if isinstance(metric_item, dict) else metric_item.name
+            value = metric_item["value"] if isinstance(metric_item, dict) else metric_item.value
+            metric = Metric(name=name, value=value)
             self.db.add(metric)
             self.db.flush()
             self.db.add(CrossMetricStats(metric_id=metric.id, stats_id=stats_id))

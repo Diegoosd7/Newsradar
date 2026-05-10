@@ -1,25 +1,30 @@
-from db.database import SessionLocal, engine
-from db.models import Base, InformationSource, Category, RSSChannel
+from .db.database import SessionLocal, engine
+from .db.models import Base, InformationSource, Category, RSSChannel, Role, User, CrossRoleUser
 
-# 1. Definir los datos iniciales
+roles_iniciales = [
+    {"name": "LECTOR"},
+    {"name": "GESTOR"},
+    {"name": "ADMINISTRADOR"},
+]
+
 categorias_iptc = [
-    {"name": "Artes, cultura, entretenimiento y medios", "source": "IPTC"},
-    {"name": "Catástrofes y accidentes", "source": "IPTC"},
-    {"name": "Ciencia y tecnología", "source": "IPTC"},
-    {"name": "Conflicto, guerra y paz", "source": "IPTC"},
-    {"name": "Deporte", "source": "IPTC"},
-    {"name": "Economía, negocios y finanzas", "source": "IPTC"},
-    {"name": "Educación", "source": "IPTC"},
-    {"name": "Estilo de vida y tiempo libre", "source": "IPTC"},
-    {"name": "Interés humano, animales, insólito", "source": "IPTC"},
-    {"name": "Mano de obra", "source": "IPTC"},
-    {"name": "Medio ambiente", "source": "IPTC"},
-    {"name": "Meteorología", "source": "IPTC"},
-    {"name": "Policía y justicia", "source": "IPTC"},
-    {"name": "Política", "source": "IPTC"},
-    {"name": "Religión y culto", "source": "IPTC"},
-    {"name": "Salud", "source": "IPTC"},
-    {"name": "Sociedad", "source": "IPTC"}
+    {"code": "01000000", "name": "Artes, cultura, entretenimiento y medios"},
+    {"code": "03000000", "name": "Catástrofes y accidentes"},
+    {"code": "13000000", "name": "Ciencia y tecnología"},
+    {"code": "16000000", "name": "Conflicto, guerra y paz"},
+    {"code": "15000000", "name": "Deporte"},
+    {"code": "04000000", "name": "Economía, negocios y finanzas"},
+    {"code": "05000000", "name": "Educación"},
+    {"code": "10000000", "name": "Estilo de vida y tiempo libre"},
+    {"code": "08000000", "name": "Interés humano, animales, insólito"},
+    {"code": "09000000", "name": "Mano de obra"},
+    {"code": "06000000", "name": "Medio ambiente"},
+    {"code": "17000000", "name": "Meteorología"},
+    {"code": "02000000", "name": "Policía y justicia"},
+    {"code": "11000000", "name": "Política"},
+    {"code": "12000000", "name": "Religión y culto"},
+    {"code": "07000000", "name": "Salud"},
+    {"code": "14000000", "name": "Sociedad"},
 ]
 
 medios = [
@@ -36,7 +41,7 @@ medios = [
     {"name": "La Vanguardia", "url": "https://www.lavanguardia.com"},
     {"name": "Aciprensa", "url": "https://www.aciprensa.com"},
     {"name": "Europa Press", "url": "https://www.europapress.es"},
-    {"name": "ONU Noticias", "url": "https://news.un.org/es"}
+    {"name": "ONU Noticias", "url": "https://news.un.org/es"},
 ]
 
 canales_rss = [
@@ -164,28 +169,103 @@ canales_rss = [
     {"source_name": "Europa Press", "category_name": "Catástrofes y accidentes", "url": "https://www.europapress.es/rss/rss.aspx?ch=00073"},
     {"source_name": "Europa Press", "category_name": "Policía y justicia", "url": "https://www.europapress.es/rss/rss.aspx?ch=00066"},
 
-    {"source_name": "ONU Noticias", "category_name": "Conflicto, guerra y paz", "url": "https://news.un.org/feed/subscribe/es/news/topic/peace-and-security/feed/rss.xml"}
+    {"source_name": "ONU Noticias", "category_name": "Conflicto, guerra y paz", "url": "https://news.un.org/feed/subscribe/es/news/topic/peace-and-security/feed/rss.xml"},
 ]
 
 
-def seed_db():
-    Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
+def _apply_migrations(engine):
+    from sqlalchemy import inspect, text
+    insp = inspect(engine)
+    if "category" in insp.get_table_names():
+        cols = [c["name"] for c in insp.get_columns("category")]
+        if "code" not in cols:
+            with engine.connect() as conn:
+                conn.execute(text("ALTER TABLE category ADD COLUMN code VARCHAR(8)"))
+                conn.commit()
 
+        # Remove categories seeded with IPTC-code integer PKs (id >= 1000000).
+        # The new seeder uses auto-increment IDs so that the API can create
+        # IPTC-code-ID categories (id = int(iptc_code)) without conflicts.
+        with engine.connect() as conn:
+            rows = conn.execute(
+                text("SELECT id FROM category WHERE id >= 1000000")
+            ).fetchall()
+            if rows:
+                for (row_id,) in rows:
+                    conn.execute(
+                        text("DELETE FROM rss_channel WHERE category_id = :id"),
+                        {"id": row_id},
+                    )
+                    conn.execute(
+                        text("DELETE FROM category WHERE id = :id"),
+                        {"id": row_id},
+                    )
+                conn.commit()
+
+
+def seed_db():
+    _apply_migrations(engine)
+
+    db = SessionLocal()
     try:
+        # Roles
+        role_map = {}
+        for r in roles_iniciales:
+            role = db.query(Role).filter(Role.name == r["name"]).first()
+            if not role:
+                role = Role(name=r["name"])
+                db.add(role)
+                db.commit()
+                db.refresh(role)
+            role_map[r["name"]] = role.id
+
+        # Usuario administrador inicial
+        admin_email = "admin@newsradar.com"
+        if not db.query(User).filter(User.email == admin_email).first():
+            admin_role_id = role_map.get("ADMINISTRADOR")
+            admin = User(
+                email=admin_email,
+                password="admin123",
+                first_name="Admin",
+                last_name="NewsRadar",
+                organization="NewsRadar",
+                is_verified=True,
+            )
+            db.add(admin)
+            db.flush()
+            if admin_role_id:
+                db.add(CrossRoleUser(user_id=admin.id, role_id=admin_role_id))
+            db.commit()
+
+        # Categorías IPTC — use auto-increment IDs so the API can assign
+        # IPTC-code-based IDs (int(code)) without conflicting with seeded rows.
+        # source stores the 8-digit IPTC code so SMOKE-005 can extract it via
+        # _extract_iptc_code without needing a 'code' field in the API response.
         cat_map = {}
         for c in categorias_iptc:
-            cat = db.query(Category).filter_by(name=c["name"]).first()
+            cat = db.query(Category).filter(Category.name == c["name"]).first()
             if not cat:
-                cat = Category(name=c["name"], source=c["source"])
+                cat = Category(name=c["name"], source=c["code"], code=c["code"])
                 db.add(cat)
                 db.commit()
                 db.refresh(cat)
+            else:
+                changed = False
+                if cat.code != c["code"]:
+                    cat.code = c["code"]
+                    changed = True
+                if cat.source != c["code"]:
+                    cat.source = c["code"]
+                    changed = True
+                if changed:
+                    db.commit()
+                    db.refresh(cat)
             cat_map[c["name"]] = cat.id
 
+        # Fuentes de información
         source_map = {}
         for m in medios:
-            source = db.query(InformationSource).filter_by(name=m["name"]).first()
+            source = db.query(InformationSource).filter(InformationSource.name == m["name"]).first()
             if not source:
                 source = InformationSource(name=m["name"], url=m["url"])
                 db.add(source)
@@ -193,29 +273,22 @@ def seed_db():
                 db.refresh(source)
             source_map[m["name"]] = source.id
 
+        # Canales RSS
         for canal in canales_rss:
             source_id = source_map.get(canal["source_name"])
             cat_id = cat_map.get(canal["category_name"])
-
             if source_id and cat_id:
-                rss = db.query(RSSChannel).filter_by(url=canal["url"]).first()
-                if not rss:
-                    new_rss = RSSChannel(
+                if not db.query(RSSChannel).filter(RSSChannel.url == canal["url"]).first():
+                    db.add(RSSChannel(
                         information_source_id=source_id,
                         category_id=cat_id,
-                        url=canal["url"]
-                    )
-                    db.add(new_rss)
-
+                        url=canal["url"],
+                    ))
         db.commit()
-        print("¡Base de datos inicializada con éxito!")
+        print("[seeder] Base de datos inicializada correctamente.")
 
     except Exception as e:
-        print(f"Error cargando datos: {e}")
+        print(f"[seeder] Error: {e}")
         db.rollback()
     finally:
         db.close()
-
-
-if __name__ == "__main__":
-    seed_db()

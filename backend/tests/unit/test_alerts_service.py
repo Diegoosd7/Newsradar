@@ -77,8 +77,8 @@ def test_create_user_alert_limit_reached():
 
     payload = AlertCreate(
         name="Tech Alert",
-        descriptors=["ai", "robotics"],
-        categories=[{"code": "tech", "label": "Technology"}],
+        descriptors=["ai", "robotics", "machine learning"],
+        categories=[{"code": "13000000", "label": "Ciencia y tecnología"}],
         cron_expression="0 * * * *",
     )
 
@@ -98,8 +98,8 @@ def test_create_user_alert_success():
 
     payload = AlertCreate(
         name="Tech Alert",
-        descriptors=["ai", "robotics"],
-        categories=[{"code": "tech", "label": "Technology"}],
+        descriptors=["ai", "robotics", "machine learning"],
+        categories=[{"code": "13000000", "label": "Ciencia y tecnología"}],
         cron_expression="0 * * * *",
     )
 
@@ -121,7 +121,7 @@ def test_create_user_alert_success():
         response = service.create_user_alert(1, payload)
 
     assert response["id"] == 5
-    mock_replace_descriptors.assert_called_once_with(5, ["ai", "robotics"])
+    mock_replace_descriptors.assert_called_once_with(5, ["ai", "robotics", "machine learning"])
     mock_replace_categories.assert_called_once_with(5, payload.categories)
     assert db.commit.called
     assert db.refresh.called
@@ -151,8 +151,8 @@ def test_update_user_alert_descriptors_and_categories():
 
     alert = FakeAlert(id=7, user_id=1, name="Old Name", cron_expression="0 * * * *")
     payload = AlertUpdate(
-        descriptors=["cloud", "devops"],
-        categories=[{"code": "it", "label": "IT"}],
+        descriptors=["cloud", "devops", "infra"],
+        categories=[{"code": "13000000", "label": "Ciencia y tecnología"}],
         cron_expression="*/30 * * * *",
     )
 
@@ -163,7 +163,7 @@ def test_update_user_alert_descriptors_and_categories():
 
         service.update_user_alert(1, 7, payload)
 
-    mock_replace_descriptors.assert_called_once_with(7, ["cloud", "devops"])
+    mock_replace_descriptors.assert_called_once_with(7, ["cloud", "devops", "infra"])
     mock_replace_categories.assert_called_once()
 
     args, _ = mock_replace_categories.call_args
@@ -172,11 +172,11 @@ def test_update_user_alert_descriptors_and_categories():
 
     category = args[1][0]
     if isinstance(category, dict):
-        assert category["code"] == "it"
-        assert category["label"] == "IT"
+        assert category["code"] == "13000000"
+        assert category["label"] == "Ciencia y tecnología"
     else:
-        assert category.code == "it"
-        assert category.label == "IT"
+        assert category.code == "13000000"
+        assert category.label == "Ciencia y tecnología"
 
     assert alert.cron_expression == "*/30 * * * *"
     assert db.commit.called

@@ -37,9 +37,11 @@ class FakeAlertsService:
                 "id": 1,
                 "user_id": user_id,
                 "name": "AI News",
-                "descriptors": ["ai", "machine learning"],
-                "categories": [{"code": "tech", "label": "Technology"}],
+                "descriptors": ["ai", "machine learning", "inteligencia"],
+                "categories": [{"code": "13000000", "label": "Ciencia y tecnología"}],
                 "cron_expression": "0 * * * *",
+                "rss_channels_ids": [],
+                "information_sources_ids": [],
             }
         ]
 
@@ -51,6 +53,8 @@ class FakeAlertsService:
             "descriptors": payload.descriptors,
             "categories": [category.model_dump() for category in payload.categories],
             "cron_expression": payload.cron_expression,
+            "rss_channels_ids": [],
+            "information_sources_ids": [],
         }
 
     def get_user_alert(self, user_id, alert_id):
@@ -58,9 +62,11 @@ class FakeAlertsService:
             "id": alert_id,
             "user_id": user_id,
             "name": "Cybersecurity Alert",
-            "descriptors": ["cyber", "security"],
-            "categories": [{"code": "security", "label": "Security"}],
+            "descriptors": ["cyber", "security", "ciberseguridad"],
+            "categories": [{"code": "13000000", "label": "Ciencia y tecnología"}],
             "cron_expression": "*/15 * * * *",
+            "rss_channels_ids": [],
+            "information_sources_ids": [],
         }
 
     def update_user_alert(self, user_id, alert_id, payload):
@@ -68,17 +74,19 @@ class FakeAlertsService:
             "id": alert_id,
             "user_id": user_id,
             "name": payload.name if payload.name is not None else "Updated Alert",
-            "descriptors": payload.descriptors if payload.descriptors is not None else ["updated"],
+            "descriptors": payload.descriptors if payload.descriptors is not None else ["cloud", "devops", "tecnología"],
             "categories": (
                 [category.model_dump() for category in payload.categories]
                 if payload.categories is not None
-                else [{"code": "updated", "label": "Updated"}]
+                else [{"code": "13000000", "label": "Ciencia y tecnología"}]
             ),
             "cron_expression": (
                 payload.cron_expression
                 if payload.cron_expression is not None
                 else "0 0 * * *"
             ),
+            "rss_channels_ids": [],
+            "information_sources_ids": [],
         }
 
     def delete_user_alert(self, user_id, alert_id):

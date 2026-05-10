@@ -18,6 +18,7 @@ class RolesService(CommonService):
         self,
         payload: RoleCreate,
     ) -> RoleResponse:
+        self._ensure_unique_role_name(payload.name)
         role = Role(name=payload.name)
         self.db.add(role)
         self.db.commit()
@@ -39,6 +40,7 @@ class RolesService(CommonService):
         role = self._get_role_or_404(role_id)
         data = payload.model_dump(exclude_unset=True)
         if "name" in data:
+            self._ensure_unique_role_name(data["name"], exclude_role_id=role_id)
             role.name = data["name"]
         self.db.commit()
         self.db.refresh(role)
@@ -69,3 +71,12 @@ class RolesService(CommonService):
         if role is None:
             raise HTTPException(status_code=404, detail="Rol no encontrado")
         return role
+
+    def _ensure_unique_role_name(self, name: str, exclude_role_id: int | None = None) -> None:
+        normalized = name.strip().lower()
+        roles = self.db.query(Role).all()
+        for role in roles:
+            if exclude_role_id is not None and role.id == exclude_role_id:
+                continue
+            if role.name.strip().lower() == normalized:
+                raise HTTPException(status_code=409, detail="Ya existe un rol con ese nombre")

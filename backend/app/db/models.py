@@ -41,7 +41,8 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True, autoincrement="auto")
     name = Column(String(120), nullable=False)
-    source = Column(String(4), default="IPTC")
+    source = Column(String(8), default="IPTC")
+    code = Column(String(8), nullable=True)
 
 
 class Descriptor(Base):

@@ -54,7 +54,7 @@ def auth_headers(auth_token):
 
 class TestSystem:
     def test_health_check_returns_ok(self, client):
-        response = client.get("/api/v1/system/health")
+        response = client.get("/api/v1/health")
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "ok"
@@ -158,7 +158,7 @@ class TestAlerts:
             json={
                 "name": "Alerta E2E",
                 "descriptors": ["tecnología", "IA"],
-                "categories": [{"code": "04000000", "label": "Economía"}],
+                "categories": [{"code": "04000000", "label": "Economía, negocios y finanzas"}],
                 "cron_expression": "0 * * * *",
             },
             headers=auth_headers,
@@ -253,12 +253,12 @@ class TestCategories:
     def test_create_category(self, client, auth_headers):
         response = client.post(
             "/api/v1/categories",
-            json={"name": "Categoría E2E", "source": "IPTC"},
+            json={"name": "Política", "source": "IPTC"},
             headers=auth_headers,
         )
         assert response.status_code == 201
         data = response.json()
-        assert data["name"] == "Categoría E2E"
+        assert data["name"] == "Política"
         TestCategories._category_id = data["id"]
 
     def test_list_categories_contains_created(self, client, auth_headers):
@@ -300,7 +300,7 @@ class TestInformationSources:
     def test_create_information_source(self, client, auth_headers):
         response = client.post(
             "/api/v1/information-sources",
-            json={"name": "Fuente E2E", "url": "https://e2e-test.example.com"},
+            json={"name": "Fuente E2E", "url": "https://example.com"},
             headers=auth_headers,
         )
         assert response.status_code == 201

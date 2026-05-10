@@ -27,5 +27,5 @@ class UserInDB(UserResponse):
 
 
 class MetricModel(BaseModel):
-    name: str = Field(..., min_length=1, max_length=100)
+    name: str = Field(..., min_length=1, max_length=80)
     value: float

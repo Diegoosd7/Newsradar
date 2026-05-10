@@ -19,7 +19,7 @@ def get_information_sources_service(db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/",
+    "",
     response_model=List[InformationSourceResponse],
     tags=["information-sources"],
 )
@@ -31,7 +31,7 @@ def list_information_sources(
 
 
 @router.post(
-    "/",
+    "",
     response_model=InformationSourceResponse,
     status_code=201,
     tags=["information-sources"],

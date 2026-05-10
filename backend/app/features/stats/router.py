@@ -19,7 +19,7 @@ def get_stats_service(db: Session = Depends(get_db)):
     return StatsService(db)
 
 
-@router.get("/", response_model=List[StatsResponse], tags=["stats"])
+@router.get("", response_model=List[StatsResponse], tags=["stats"])
 def list_stats(
     _: UserInDB = Depends(get_current_user),
     service: StatsService = Depends(get_stats_service),
@@ -27,7 +27,7 @@ def list_stats(
     return service.list_stats()
 
 
-@router.post("/", response_model=StatsResponse, status_code=201, tags=["stats"])
+@router.post("", response_model=StatsResponse, status_code=201, tags=["stats"])
 def create_stats(
     payload: StatsCreate,
     _: UserInDB = Depends(get_current_user),

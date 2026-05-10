@@ -17,6 +17,7 @@ from app.features.users.router import router as users_router
 from app.db.database import SessionLocal, engine
 from app.db.models import Base
 from app.core.scheduler import start_scheduler, stop_scheduler
+from app.seeder import seed_db
 
 ENV_FILE = Path(__file__).resolve().parents[1] / ".env"
 load_dotenv(dotenv_path=ENV_FILE)
@@ -33,6 +34,7 @@ app = FastAPI(
 @app.on_event("startup")
 def on_startup() -> None:
     Base.metadata.create_all(bind=engine)
+    seed_db()
 
     if os.getenv("DISABLE_SCHEDULER", "0") == "1":
         return

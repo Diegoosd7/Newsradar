@@ -14,7 +14,7 @@ def get_roles_service(db: Session = Depends(get_db)):
     return RolesService(db)
 
 
-@router.get("/", response_model=List[RoleResponse], tags=["roles"])
+@router.get("", response_model=List[RoleResponse], tags=["roles"])
 def list_roles(
     _: UserInDB = Depends(get_current_user),
     service: RolesService = Depends(get_roles_service),
@@ -22,7 +22,7 @@ def list_roles(
     return service.list_roles()
 
 
-@router.post("/", response_model=RoleResponse, status_code=201, tags=["roles"])
+@router.post("", response_model=RoleResponse, status_code=201, tags=["roles"])
 def create_role(
     payload: RoleCreate,
     _: UserInDB = Depends(get_current_user),

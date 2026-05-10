@@ -14,7 +14,7 @@ def get_users_service(db: Session = Depends(get_db)):
     return UsersService(db)
 
 
-@router.get("/", response_model=List[UserResponse])
+@router.get("", response_model=List[UserResponse])
 def list_users(
     _: UserInDB = Depends(get_current_user),
     service: UsersService = Depends(get_users_service),
@@ -22,7 +22,7 @@ def list_users(
     return service.list_users()
 
 
-@router.post("/", response_model=UserResponse, status_code=201)
+@router.post("", response_model=UserResponse, status_code=201)
 def create_user(
     payload: UserCreate,
     _: UserInDB = Depends(get_current_user),

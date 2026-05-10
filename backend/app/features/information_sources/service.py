@@ -8,6 +8,12 @@ from .schemas import (
     InformationSourceUpdate,
 )
 from ...core.common_service import CommonService
+from ...core.url_validation import validate_url_safety
+
+
+def _normalize_url(url: str) -> str:
+    normalized = str(url).strip().lower().rstrip("/")
+    return normalized
 
 
 class InformationSourcesService(CommonService):
@@ -22,10 +28,25 @@ class InformationSourcesService(CommonService):
         ]
 
     def create_information_source(self, payload: InformationSourceCreate) -> InformationSourceResponse:
-        # Convertimos la URL de Pydantic a string para la BD
+        url_str = str(payload.url)
+        validate_url_safety(url_str)
+
+        normalized_url = _normalize_url(url_str)
+
+        existing_by_name = self.db.query(InformationSource).filter(
+            InformationSource.name == payload.name
+        ).first()
+        if existing_by_name is not None:
+            raise HTTPException(status_code=409, detail="Ya existe una fuente con ese nombre")
+
+        existing_sources = self.db.query(InformationSource).all()
+        for src in existing_sources:
+            if _normalize_url(src.url) == normalized_url:
+                raise HTTPException(status_code=409, detail="Ya existe una fuente con esa URL")
+
         new_source = InformationSource(
-            name=payload.name, 
-            url=str(payload.url)
+            name=payload.name,
+            url=url_str,
         )
         self.db.add(new_source)
         self.db.commit()
@@ -44,10 +65,20 @@ class InformationSourcesService(CommonService):
         source = self._get_source_or_404(source_id)
         data = payload.model_dump(exclude_unset=True)
 
+        if "url" in data:
+            new_url = str(data["url"])
+            validate_url_safety(new_url)
+            normalized_new = _normalize_url(new_url)
+            existing_sources = self.db.query(InformationSource).filter(
+                InformationSource.id != source_id
+            ).all()
+            for src in existing_sources:
+                if _normalize_url(src.url) == normalized_new:
+                    raise HTTPException(status_code=409, detail="Ya existe una fuente con esa URL")
+            source.url = new_url
+
         if "name" in data:
             source.name = data["name"]
-        if "url" in data:
-            source.url = str(data["url"])
 
         self.db.commit()
         self.db.refresh(source)

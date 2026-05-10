@@ -4,6 +4,11 @@ from sqlalchemy.orm import Session
 from .schemas import RSSChannelResponse, RSSChannelCreate, RSSChannelUpdate
 from ...core.common_service import CommonService
 from ...db.models import RSSChannel, InformationSource, Category
+from ...core.url_validation import validate_rss_url
+
+
+def _normalize_url(url: str) -> str:
+    return str(url).strip().lower().rstrip("/")
 
 
 class RSSChannelService(CommonService):
@@ -46,10 +51,23 @@ class RSSChannelService(CommonService):
         self._ensure_information_source_exists(source_id)
         self._ensure_category_exists(payload.category_id)
 
+        url_str = str(payload.url)
+        validate_rss_url(url_str)
+        normalized_url = _normalize_url(url_str)
+
+        existing_channels = (
+            self.db.query(RSSChannel)
+            .filter(RSSChannel.information_source_id == source_id)
+            .all()
+        )
+        for ch in existing_channels:
+            if _normalize_url(ch.url) == normalized_url:
+                raise HTTPException(status_code=409, detail="Ya existe un canal RSS con esa URL para esta fuente")
+
         new_channel = RSSChannel(
             information_source_id=source_id,
             category_id=payload.category_id,
-            url=str(payload.url)
+            url=url_str,
         )
         self.db.add(new_channel)
         self.db.commit()
@@ -89,7 +107,21 @@ class RSSChannelService(CommonService):
             self._ensure_category_exists(data["category_id"])
             channel.category_id = data["category_id"]
         if "url" in data:
-            channel.url = str(data["url"])
+            new_url = str(data["url"])
+            validate_rss_url(new_url)
+            normalized_new = _normalize_url(new_url)
+            existing_channels = (
+                self.db.query(RSSChannel)
+                .filter(
+                    RSSChannel.information_source_id == source_id,
+                    RSSChannel.id != channel_id,
+                )
+                .all()
+            )
+            for ch in existing_channels:
+                if _normalize_url(ch.url) == normalized_new:
+                    raise HTTPException(status_code=409, detail="Ya existe un canal RSS con esa URL para esta fuente")
+            channel.url = new_url
 
         self.db.commit()
         self.db.refresh(channel)

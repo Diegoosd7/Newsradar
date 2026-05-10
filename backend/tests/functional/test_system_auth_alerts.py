@@ -65,7 +65,7 @@ class LimitAlertsService:
 
 
 def test_health_endpoint(client):
-    response = client.get("/api/v1/system/health")
+    response = client.get("/api/v1/health")
     assert response.status_code == 200
 
     data = response.json()
@@ -190,8 +190,8 @@ def test_list_user_alerts_user_not_found(client):
 def test_create_user_alert(client):
     payload = {
         "name": "Tech Alert",
-        "descriptors": ["ai", "robotics"],
-        "categories": [{"code": "tech", "label": "Technology"}],
+        "descriptors": ["ai", "robotics", "machine learning"],
+        "categories": [{"code": "13000000", "label": "Ciencia y tecnología"}],
         "cron_expression": "0 * * * *",
     }
 
@@ -235,8 +235,8 @@ def test_create_user_alert_limit_reached(client):
 
     payload = {
         "name": "Tech Alert",
-        "descriptors": ["ai", "robotics"],
-        "categories": [{"code": "tech", "label": "Technology"}],
+        "descriptors": ["ai", "robotics", "machine learning"],
+        "categories": [{"code": "13000000", "label": "Ciencia y tecnología"}],
         "cron_expression": "0 * * * *",
     }
 
@@ -271,8 +271,8 @@ def test_get_user_alert_not_found(client):
 def test_update_user_alert(client):
     payload = {
         "name": "Updated Tech Alert",
-        "descriptors": ["cloud", "devops"],
-        "categories": [{"code": "it", "label": "IT"}],
+        "descriptors": ["cloud", "devops", "infra"],
+        "categories": [{"code": "13000000", "label": "Ciencia y tecnología"}],
         "cron_expression": "*/30 * * * *",
     }
 

@@ -1,3 +1,4 @@
+import re
 from typing import List
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
@@ -5,6 +6,8 @@ from .schemas import UserUpdate
 from ...core.shared_schemas import UserCreate, UserResponse
 from ...core.common_service import CommonService
 from ...db.models import User, Role, CrossRoleUser, Alert, Notification
+
+_HTML_TAG_RE = re.compile(r"<[^>]+>")
 
 
 class UsersService(CommonService):
@@ -20,7 +23,20 @@ class UsersService(CommonService):
         payload: UserCreate,
     ) -> UserResponse:
         self._ensure_unique_email(payload.email)
-        self._ensure_roles_exist(payload.role_ids)
+        self._reject_html(payload.first_name, "first_name")
+        self._reject_html(payload.last_name, "last_name")
+        self._reject_html(payload.organization, "organization")
+
+        role_ids = list(payload.role_ids)
+        if len(role_ids) > 1:
+            raise HTTPException(status_code=422, detail="Un usuario solo puede tener un rol")
+
+        if not role_ids:
+            gestor = self._find_gestor_role()
+            if gestor is not None:
+                role_ids = [gestor.id]
+        else:
+            self._ensure_roles_exist(role_ids)
 
         user = User(
             email=payload.email,
@@ -32,7 +48,7 @@ class UsersService(CommonService):
         self.db.add(user)
         self.db.flush()
 
-        for role_id in payload.role_ids:
+        for role_id in role_ids:
             self.db.add(CrossRoleUser(user_id=user.id, role_id=role_id))
 
         self.db.commit()
@@ -112,11 +128,12 @@ class UsersService(CommonService):
         return user
 
     def _ensure_unique_email(self, email: str, exclude_user_id: int | None = None) -> None:
-        query = self.db.query(User).filter(User.email == email)
+        users = self.db.query(User)
         if exclude_user_id is not None:
-            query = query.filter(User.id != exclude_user_id)
-        if query.first() is not None:
-            raise HTTPException(status_code=409, detail="El email ya está registrado")
+            users = users.filter(User.id != exclude_user_id)
+        for user in users.all():
+            if user.email.lower() == email.lower():
+                raise HTTPException(status_code=409, detail="El email ya está registrado")
 
     def _ensure_roles_exist(self, role_ids: List[int]) -> None:
         if not role_ids:
@@ -126,6 +143,17 @@ class UsersService(CommonService):
         missing = [role_id for role_id in role_ids if role_id not in found_ids]
         if missing:
             raise HTTPException(status_code=400, detail=f"Roles no encontrados: {missing}")
+
+    def _find_gestor_role(self) -> Role | None:
+        roles = self.db.query(Role).all()
+        for role in roles:
+            if role.name.strip().lower() == "gestor":
+                return role
+        return None
+
+    def _reject_html(self, value: str, field: str) -> None:
+        if _HTML_TAG_RE.search(value):
+            raise HTTPException(status_code=422, detail=f"El campo {field} contiene HTML no permitido")
 
     def _to_response(self, user: User) -> UserResponse:
         role_ids = [role_id for (role_id,) in self.db.query(CrossRoleUser.role_id).filter(CrossRoleUser.user_id == user.id).all()]
