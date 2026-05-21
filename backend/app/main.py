@@ -30,7 +30,6 @@ app = FastAPI(
     description="API REST para gestión de usuarios, alertas, notificaciones, fuentes y canales RSS.",
 )
 
-
 @app.on_event("startup")
 def on_startup() -> None:
     Base.metadata.create_all(bind=engine)

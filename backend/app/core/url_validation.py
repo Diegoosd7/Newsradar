@@ -1,11 +1,12 @@
 import ipaddress
-import socket
 import urllib.request
 from urllib.parse import urlparse
 
 from fastapi import HTTPException
 
-_BLOCKED_TLDS = frozenset([".invalid", ".local", ".internal", ".test", ".localhost", ".example"])
+_BLOCKED_TLDS = frozenset([".invalid", ".local", ".internal", ".test", ".localhost"])
+
+_BLOCKED_HOSTNAMES = frozenset(["localhost", "127.0.0.1", "::1"])
 
 
 def validate_url_safety(url_str: str) -> None:
@@ -18,24 +19,24 @@ def validate_url_safety(url_str: str) -> None:
             raise HTTPException(status_code=422, detail="URL no contiene host válido")
 
         hostname_lower = hostname.lower()
+
+        if hostname_lower in _BLOCKED_HOSTNAMES:
+            raise HTTPException(status_code=422, detail="Dominio no accesible")
+
         for tld in _BLOCKED_TLDS:
             if hostname_lower.endswith(tld):
                 raise HTTPException(status_code=422, detail="Dominio no accesible")
 
+        # Si parece una IP directa, comprobar que no sea privada
         try:
-            ip_str = socket.gethostbyname(hostname)
-        except socket.gaierror:
-            raise HTTPException(status_code=422, detail="Dominio no resolvible")
-
-        try:
-            ip_obj = ipaddress.ip_address(ip_str)
+            ip_obj = ipaddress.ip_address(hostname)
             if ip_obj.is_loopback or ip_obj.is_private:
                 raise HTTPException(
                     status_code=422,
                     detail="URL no accesible: IP privada o de loopback no permitida",
                 )
         except ValueError:
-            pass
+            pass  # No es una IP, es un hostname normal — aceptar
 
     except HTTPException:
         raise
@@ -44,12 +45,7 @@ def validate_url_safety(url_str: str) -> None:
 
 
 def validate_rss_url(url_str: str) -> None:
-    """Validate URL safety and that it serves RSS/XML content when reachable.
-
-    If the URL cannot be fetched (network timeout, connection error) but passed
-    safety checks, we accept it — only reject when the server responds with
-    clearly non-RSS content (HTML, JSON, etc.).
-    """
+    """Validate URL safety and that it serves RSS/XML content when reachable."""
     validate_url_safety(url_str)
 
     try:
@@ -68,6 +64,4 @@ def validate_rss_url(url_str: str) -> None:
     except HTTPException:
         raise
     except Exception:
-        # Network errors (timeout, DNS, connection refused) are not treated as
-        # validation failures — the URL passed safety checks, so accept it.
         return

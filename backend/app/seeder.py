@@ -243,14 +243,18 @@ def seed_db():
         # _extract_iptc_code without needing a 'code' field in the API response.
         cat_map = {}
         for c in categorias_iptc:
-            cat = db.query(Category).filter(Category.name == c["name"]).first()
+            target_id = int(c["code"])
+            cat = db.query(Category).filter(Category.id == target_id).first()
             if not cat:
-                cat = Category(name=c["name"], source=c["code"], code=c["code"])
+                cat = Category(id=target_id, name=c["name"], source=c["code"], code=c["code"])
                 db.add(cat)
                 db.commit()
                 db.refresh(cat)
             else:
                 changed = False
+                if cat.name != c["name"]:
+                    cat.name = c["name"]
+                    changed = True
                 if cat.code != c["code"]:
                     cat.code = c["code"]
                     changed = True
