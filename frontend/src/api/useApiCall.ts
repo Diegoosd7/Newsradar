@@ -34,7 +34,18 @@ async function handleResponse<T>(res: Response): Promise<T> {
     let detail = `Error ${res.status}`
     try {
       const body = await res.json()
-      detail = body.detail ?? detail
+      if (Array.isArray(body.detail)) {
+        detail = body.detail
+          .map((e: { loc?: unknown[]; msg?: string }) => {
+            const field = Array.isArray(e.loc) ? e.loc.slice(1).join('.') : ''
+            return field ? `${field}: ${e.msg}` : (e.msg ?? 'Validation error')
+          })
+          .join(' | ')
+      } else if (typeof body.detail === 'string') {
+        detail = body.detail
+      } else if (body.detail) {
+        detail = JSON.stringify(body.detail)
+      }
     } catch {
       // ignore parse error
     }
