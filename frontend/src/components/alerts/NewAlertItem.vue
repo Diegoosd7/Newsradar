@@ -20,7 +20,7 @@
 				<p>CATEGORÍA</p>
 				<select v-model.number="fields.categoryId" name="alert-category">
 					<option :value="0" disabled>Selecciona...</option>
-					<option v-for="category in props.categories" :key="category.id" :value="category.id">
+					<option v-for="category in iptcCategories" :key="category.id" :value="category.id">
 						{{ category.name }}
 					</option>
 				</select>
@@ -103,6 +103,10 @@ const fields = reactive({
 const loading = ref(false);
 const error = ref("");
 
+const iptcCategories = computed(() =>
+	props.categories.filter((c) => /^\d{8}$/.test(c.source)),
+);
+
 const parsedDescriptors = computed(() =>
 	fields.descriptorsText
 		.split(",")
@@ -142,7 +146,7 @@ const sendForm = async () => {
 		return;
 	}
 
-	const category = props.categories.find((c) => c.id === fields.categoryId);
+	const category = iptcCategories.value.find((c) => c.id === fields.categoryId);
 	if (!category) {
 		error.value = "Categoría no válida.";
 		return;
