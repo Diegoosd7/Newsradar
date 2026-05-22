@@ -6,6 +6,14 @@ import type {
   UserUpdateRequest,
   RoleResponse,
   DashboardStatsResponse,
+  CategoryResponse,
+  InformationSourceResponse,
+  InformationSourceCreateRequest,
+  RssChannelResponse,
+  RssChannelCreateRequest,
+  AlertResponse,
+  AlertCreateRequest,
+  NotificationResponse,
 } from './types'
 
 const BASE_URL = '/api/v1'
@@ -97,6 +105,153 @@ export function useApiCall() {
     return handleResponse<DashboardStatsResponse>(res)
   }
 
+  // Categories
+  async function getCategories(token: string): Promise<CategoryResponse[]> {
+    const res = await fetch(`${BASE_URL}/categories`, {
+      headers: authHeaders(token),
+    })
+    return handleResponse<CategoryResponse[]>(res)
+  }
+
+  // Information Sources
+  async function getSources(token: string): Promise<InformationSourceResponse[]> {
+    const res = await fetch(`${BASE_URL}/information-sources`, {
+      headers: authHeaders(token),
+    })
+    return handleResponse<InformationSourceResponse[]>(res)
+  }
+
+  async function createSource(
+    token: string,
+    data: InformationSourceCreateRequest,
+  ): Promise<InformationSourceResponse> {
+    const res = await fetch(`${BASE_URL}/information-sources`, {
+      method: 'POST',
+      headers: authHeaders(token),
+      body: JSON.stringify(data),
+    })
+    return handleResponse<InformationSourceResponse>(res)
+  }
+
+  async function deleteSource(token: string, sourceId: number): Promise<void> {
+    const res = await fetch(`${BASE_URL}/information-sources/${sourceId}`, {
+      method: 'DELETE',
+      headers: authHeaders(token),
+    })
+    return handleResponse<void>(res)
+  }
+
+  // RSS Channels (all)
+  async function getAllChannels(token: string): Promise<RssChannelResponse[]> {
+    const res = await fetch(`${BASE_URL}/rss-channels`, {
+      headers: authHeaders(token),
+    })
+    return handleResponse<RssChannelResponse[]>(res)
+  }
+
+  // RSS Channels (per source)
+  async function getSourceChannels(
+    token: string,
+    sourceId: number,
+  ): Promise<RssChannelResponse[]> {
+    const res = await fetch(
+      `${BASE_URL}/information-sources/${sourceId}/rss-channels`,
+      { headers: authHeaders(token) },
+    )
+    return handleResponse<RssChannelResponse[]>(res)
+  }
+
+  async function createSourceChannel(
+    token: string,
+    sourceId: number,
+    data: RssChannelCreateRequest,
+  ): Promise<RssChannelResponse> {
+    const res = await fetch(
+      `${BASE_URL}/information-sources/${sourceId}/rss-channels`,
+      {
+        method: 'POST',
+        headers: authHeaders(token),
+        body: JSON.stringify(data),
+      },
+    )
+    return handleResponse<RssChannelResponse>(res)
+  }
+
+  async function deleteSourceChannel(
+    token: string,
+    sourceId: number,
+    channelId: number,
+  ): Promise<void> {
+    const res = await fetch(
+      `${BASE_URL}/information-sources/${sourceId}/rss-channels/${channelId}`,
+      {
+        method: 'DELETE',
+        headers: authHeaders(token),
+      },
+    )
+    return handleResponse<void>(res)
+  }
+
+  // Alerts (per user)
+  async function getUserAlerts(token: string, userId: number): Promise<AlertResponse[]> {
+    const res = await fetch(`${BASE_URL}/users/${userId}/alerts`, {
+      headers: authHeaders(token),
+    })
+    return handleResponse<AlertResponse[]>(res)
+  }
+
+  async function createUserAlert(
+    token: string,
+    userId: number,
+    data: AlertCreateRequest,
+  ): Promise<AlertResponse> {
+    const res = await fetch(`${BASE_URL}/users/${userId}/alerts`, {
+      method: 'POST',
+      headers: authHeaders(token),
+      body: JSON.stringify(data),
+    })
+    return handleResponse<AlertResponse>(res)
+  }
+
+  async function deleteUserAlert(
+    token: string,
+    userId: number,
+    alertId: number,
+  ): Promise<void> {
+    const res = await fetch(`${BASE_URL}/users/${userId}/alerts/${alertId}`, {
+      method: 'DELETE',
+      headers: authHeaders(token),
+    })
+    return handleResponse<void>(res)
+  }
+
+  // Notifications (per user)
+  async function getUserNotifications(
+    token: string,
+    userId: number,
+  ): Promise<NotificationResponse[]> {
+    const res = await fetch(`${BASE_URL}/users/${userId}/notifications`, {
+      headers: authHeaders(token),
+    })
+    return handleResponse<NotificationResponse[]>(res)
+  }
+
+  async function deleteAlertNotification(
+    token: string,
+    userId: number,
+    alertId: number,
+    notificationId: number,
+  ): Promise<void> {
+    const res = await fetch(
+      `${BASE_URL}/users/${userId}/alerts/${alertId}/notifications/${notificationId}`,
+      {
+        method: 'DELETE',
+        headers: authHeaders(token),
+      },
+    )
+    return handleResponse<void>(res)
+  }
+
   return {
     login,
     register,
@@ -105,5 +260,18 @@ export function useApiCall() {
     deleteUser,
     getRoles,
     getDashboardStats,
+    getCategories,
+    getSources,
+    createSource,
+    deleteSource,
+    getAllChannels,
+    getSourceChannels,
+    createSourceChannel,
+    deleteSourceChannel,
+    getUserAlerts,
+    createUserAlert,
+    deleteUserAlert,
+    getUserNotifications,
+    deleteAlertNotification,
   }
 }

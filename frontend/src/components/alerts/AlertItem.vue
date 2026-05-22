@@ -1,27 +1,68 @@
 <template>
 	<div class="alert-item">
-		<div>Titulo</div>
+		<div>{{ props.alert.name }}</div>
 		<div class="descriptors-section">
-			<p class="descriptor">Hola1</p>
-			<p class="descriptor">Hola2</p>
-			<p class="descriptor">Hola2</p>
-			<p class="descriptor">Hola2</p>
-			<p class="descriptor">Hola2</p>
+			<p v-for="descriptor in props.alert.descriptors" :key="descriptor" class="descriptor">
+				{{ descriptor }}
+			</p>
 		</div>
-		<div>Sociedad</div>
-		<div>*****</div>
+		<div>
+			<span v-for="cat in props.alert.categories" :key="cat.code">{{ cat.label }}</span>
+			<span v-if="props.alert.categories.length === 0">—</span>
+		</div>
+		<div>{{ props.alert.cron_expression }}</div>
 		<div>Correo</div>
 		<div class="rss-section">
-			<p class="rss">El País: www.api2.rtve.es</p>
-			<p class="rss">El País: www.api2.rtve.es</p>
-			<p class="rss">El País: www.api2.rtve.es</p>
-			<p class="rss">El País: www.api2.rtve.es</p>
+			<p v-for="channelId in props.alert.rss_channels_ids" :key="channelId" class="rss">
+				{{ channelLabel(channelId) }}
+			</p>
+			<p v-if="props.alert.rss_channels_ids.length === 0" class="rss">—</p>
 		</div>
-		<div class="action-section"><button class="x-button">X</button></div>
+		<div class="action-section">
+			<button @click="deleteAlert" class="x-button">X</button>
+		</div>
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useApiCall } from "@/api/useApiCall";
+import { useAuthStore } from "@/stores/auth";
+import type {
+	AlertResponse,
+	InformationSourceResponse,
+	RssChannelResponse,
+} from "@/api/types";
+
+type Props = {
+	alert: AlertResponse;
+	channels: RssChannelResponse[];
+	sources: InformationSourceResponse[];
+};
+const props = defineProps<Props>();
+const emit = defineEmits<{ deleted: [] }>();
+
+const api = useApiCall();
+const auth = useAuthStore();
+
+const channelLabel = (channelId: number): string => {
+	const channel = props.channels.find((c) => c.id === channelId);
+	if (!channel) return `#${channelId}`;
+	const source = props.sources.find((s) => s.id === channel.information_source_id);
+	const sourceName = source ? source.name : `Fuente #${channel.information_source_id}`;
+	return `${sourceName}: ${channel.url}`;
+};
+
+const deleteAlert = async () => {
+	if (!auth.token || !auth.user) return;
+	if (!confirm(`¿Eliminar la alerta "${props.alert.name}"?`)) return;
+	try {
+		await api.deleteUserAlert(auth.token, auth.user.id, props.alert.id);
+		emit("deleted");
+	} catch (e: unknown) {
+		alert(e instanceof Error ? e.message : "Error eliminando la alerta.");
+	}
+};
+</script>
 
 <style scoped>
 .alert-item {

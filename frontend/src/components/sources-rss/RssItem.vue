@@ -1,14 +1,32 @@
 <template>
 	<div class="rss-item">
 		<p class="field iptc-field">{{ props.iptcCategory }}</p>
-		<p class="field">{{ props.url }}</p>
-		<button class="x-button">X</button>
+		<p class="field url-field">{{ props.url }}</p>
+		<button @click="deleteItem" class="x-button">X</button>
 	</div>
 </template>
 
 <script setup lang="ts">
-type Props = { id: number; iptcCategory: string; url: string };
+import { useApiCall } from "@/api/useApiCall";
+import { useAuthStore } from "@/stores/auth";
+
+type Props = { id: number; sourceId: number; iptcCategory: string; url: string };
 const props = defineProps<Props>();
+const emit = defineEmits<{ deleted: [] }>();
+
+const api = useApiCall();
+const auth = useAuthStore();
+
+const deleteItem = async () => {
+	if (!auth.token) return;
+	if (!confirm("¿Eliminar este canal RSS?")) return;
+	try {
+		await api.deleteSourceChannel(auth.token, props.sourceId, props.id);
+		emit("deleted");
+	} catch (e: unknown) {
+		alert(e instanceof Error ? e.message : "Error eliminando canal RSS.");
+	}
+};
 </script>
 
 <style scoped>
@@ -25,5 +43,15 @@ const props = defineProps<Props>();
 .iptc-field {
 	border: 1px solid black;
 	padding: 0.5rem;
+	white-space: nowrap;
+}
+
+.url-field {
+	flex: 1;
+	word-break: break-all;
+}
+
+.x-button {
+	padding: 0.5rem 1rem;
 }
 </style>
