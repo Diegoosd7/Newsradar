@@ -4,10 +4,26 @@
 			<h1>Notificaciones</h1>
 		</div>
 		<div class="main">
+			<p v-if="error" class="error-msg">{{ error }}</p>
+			<p v-if="loading">Cargando notificaciones...</p>
+			<p v-else-if="notifications.length === 0">No tienes notificaciones todavía.</p>
+			<p v-else class="count-line">
+				Total de notificaciones: <strong>{{ notifications.length }}</strong>
+			</p>
 			<div class="container">
-				<template v-for="notification in notifications">
-					<NotificationItem v-bind="notification" />
-				</template>
+				<NotificationItem
+					v-for="notification in notifications"
+					:key="notification.id"
+					:alert-title="alertTitle(notification.alert_id)"
+					:datetime="formatDateTime(notification.timestamp)"
+					:news="{
+						origin: notification.source_name ?? '—',
+						publication: formatDateTime(notification.news_published),
+						title: notification.news_title ?? '—',
+						summary: notification.news_summary ?? '—',
+					}"
+					@delete="onDelete(notification)"
+				/>
 			</div>
 		</div>
 	</div>
@@ -15,36 +31,74 @@
 
 <script setup lang="ts">
 import NotificationItem from "./NotificationItem.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useApiCall } from "@/api/useApiCall";
+import { useAuthStore } from "@/stores/auth";
+import type { AlertResponse, NotificationResponse } from "@/api/types";
 
-const notifications = ref([
-	{
-		alertTitle: "MI ALERTA",
-		datetime: "10/03/2026 - 18:32",
-		news: {
-			origin: "El País",
-			publication: "10/03/2026 - 10:04",
-			title: "Título de la noticia",
-			summary: "Lorem ipsum",
-		},
-	},
-	{
-		alertTitle: "MI ALERTA",
-		datetime: "10/03/2026 - 18:32",
-		news: {
-			origin: "El País",
-			publication: "10/03/2026 - 10:04",
-			title: "Título de la noticia",
-			summary: "Lorem ipsum",
-		},
-	},
-]);
+const api = useApiCall();
+const auth = useAuthStore();
+
+const notifications = ref<NotificationResponse[]>([]);
+const alerts = ref<AlertResponse[]>([]);
+const loading = ref<boolean>(false);
+const error = ref<string>("");
+
+const alertTitle = (alertId: number): string => {
+	const a = alerts.value.find((x) => x.id === alertId);
+	return a ? a.name : `Alerta #${alertId}`;
+};
+
+const formatDateTime = (iso: string | null | undefined): string => {
+	if (!iso) return "—";
+	const d = new Date(iso);
+	if (Number.isNaN(d.getTime())) return iso;
+	const pad = (n: number) => String(n).padStart(2, "0");
+	return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} - ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
+const loadAll = async () => {
+	if (!auth.token || !auth.user) return;
+	loading.value = true;
+	error.value = "";
+	try {
+		const [n, a] = await Promise.all([
+			api.getUserNotifications(auth.token, auth.user.id),
+			api.getUserAlerts(auth.token, auth.user.id),
+		]);
+		notifications.value = n;
+		alerts.value = a;
+	} catch (e: unknown) {
+		error.value = e instanceof Error ? e.message : "Error cargando notificaciones.";
+	} finally {
+		loading.value = false;
+	}
+};
+
+const onDelete = async (notification: NotificationResponse) => {
+	if (!auth.token || !auth.user) return;
+	if (!confirm("¿Eliminar esta notificación?")) return;
+	try {
+		await api.deleteAlertNotification(
+			auth.token,
+			auth.user.id,
+			notification.alert_id,
+			notification.id,
+		);
+		await loadAll();
+	} catch (e: unknown) {
+		alert(e instanceof Error ? e.message : "Error eliminando notificación.");
+	}
+};
+
+onMounted(loadAll);
 </script>
 
 <style scoped>
 .main {
 	display: flex;
 	flex-direction: column;
+	gap: 1rem;
 	justify-content: center;
 	align-items: center;
 }
@@ -54,5 +108,17 @@ const notifications = ref([
 	flex-direction: column;
 	gap: 1rem;
 	width: max-content;
+}
+
+.count-line {
+	font-size: 1rem;
+}
+
+.error-msg {
+	color: rgb(203, 61, 61);
+	border: 1px solid rgb(203, 61, 61);
+	background-color: rgb(254, 236, 236);
+	padding: 0.5rem;
+	font-size: 0.9rem;
 }
 </style>

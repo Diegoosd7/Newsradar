@@ -7,7 +7,7 @@
 				en
 				<span class="highlight">{{ props.datetime }}</span>
 			</p>
-			<button class="delete-button">X</button>
+			<button @click="emit('delete')" class="delete-button">X</button>
 		</div>
 		<div class="main">
 			<div class="field-container">
@@ -44,6 +44,7 @@ type Props = {
 	};
 };
 const props = defineProps<Props>();
+const emit = defineEmits<{ delete: [] }>();
 </script>
 
 <style scoped>
