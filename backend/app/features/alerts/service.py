@@ -15,6 +15,8 @@ from ...db.models import (
     AlertCategoryItem,
     CrossAlertDescriptor,
     CrossAlertAlertCategoryItem,
+    CrossAlertRSSChannel,
+    CrossAlertInformationSource,
     InformationSource,
     RSSChannel,
     Notification,
@@ -152,6 +154,8 @@ class AlertsService(CommonService):
 
         self._replace_descriptors(alert.id, expanded_descriptors)
         self._replace_categories(alert.id, payload.categories)
+        self._replace_rss_channels(alert.id, payload.rss_channels_ids)
+        self._replace_information_sources(alert.id, payload.information_sources_ids)
 
         self.db.commit()
         self.db.refresh(alert)
@@ -183,6 +187,12 @@ class AlertsService(CommonService):
             self._replace_descriptors(alert_id, expanded)
         if "categories" in data:
             self._replace_categories(alert_id, data["categories"])
+        if "rss_channels_ids" in data:
+            self._ensure_rss_channels_exist(data["rss_channels_ids"])
+            self._replace_rss_channels(alert_id, data["rss_channels_ids"])
+        if "information_sources_ids" in data:
+            self._ensure_information_sources_exist(data["information_sources_ids"])
+            self._replace_information_sources(alert_id, data["information_sources_ids"])
 
         self.db.commit()
         self.db.refresh(alert)
@@ -207,6 +217,14 @@ class AlertsService(CommonService):
 
         self.db.query(CrossAlertAlertCategoryItem).filter(
             CrossAlertAlertCategoryItem.alert_id == alert_id
+        ).delete(synchronize_session=False)
+
+        self.db.query(CrossAlertRSSChannel).filter(
+            CrossAlertRSSChannel.alert_id == alert_id
+        ).delete(synchronize_session=False)
+
+        self.db.query(CrossAlertInformationSource).filter(
+            CrossAlertInformationSource.alert_id == alert_id
         ).delete(synchronize_session=False)
 
         self.db.query(Alert).filter(Alert.id == alert_id).delete(
@@ -287,6 +305,36 @@ class AlertsService(CommonService):
                 CrossAlertDescriptor(alert_id=alert_id, descriptor_id=descriptor.id)
             )
 
+    def _replace_rss_channels(self, alert_id: int, channel_ids: List[int]) -> None:
+        self.db.query(CrossAlertRSSChannel).filter(
+            CrossAlertRSSChannel.alert_id == alert_id
+        ).delete(synchronize_session=False)
+
+        seen: set[int] = set()
+        for channel_id in channel_ids or []:
+            if channel_id in seen:
+                continue
+            seen.add(channel_id)
+            self.db.add(
+                CrossAlertRSSChannel(alert_id=alert_id, rss_channel_id=channel_id)
+            )
+
+    def _replace_information_sources(self, alert_id: int, source_ids: List[int]) -> None:
+        self.db.query(CrossAlertInformationSource).filter(
+            CrossAlertInformationSource.alert_id == alert_id
+        ).delete(synchronize_session=False)
+
+        seen: set[int] = set()
+        for source_id in source_ids or []:
+            if source_id in seen:
+                continue
+            seen.add(source_id)
+            self.db.add(
+                CrossAlertInformationSource(
+                    alert_id=alert_id, information_source_id=source_id
+                )
+            )
+
     def _replace_categories(self, alert_id: int, categories: List[dict]) -> None:
         self.db.query(CrossAlertAlertCategoryItem).filter(
             CrossAlertAlertCategoryItem.alert_id == alert_id
@@ -342,6 +390,24 @@ class AlertsService(CommonService):
             )
         ]
 
+        rss_channels_ids = [
+            cid
+            for (cid,) in (
+                self.db.query(CrossAlertRSSChannel.rss_channel_id)
+                .filter(CrossAlertRSSChannel.alert_id == alert.id)
+                .all()
+            )
+        ]
+
+        information_sources_ids = [
+            sid
+            for (sid,) in (
+                self.db.query(CrossAlertInformationSource.information_source_id)
+                .filter(CrossAlertInformationSource.alert_id == alert.id)
+                .all()
+            )
+        ]
+
         return AlertResponse(
             id=alert.id,
             user_id=alert.user_id,
@@ -349,6 +415,6 @@ class AlertsService(CommonService):
             cron_expression=alert.cron_expression,
             descriptors=descriptors,
             categories=categories,
-            rss_channels_ids=[],
-            information_sources_ids=[],
+            rss_channels_ids=rss_channels_ids,
+            information_sources_ids=information_sources_ids,
         )

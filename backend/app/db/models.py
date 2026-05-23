@@ -222,3 +222,27 @@ class CrossMetricStats(Base):
     stats_id = Column(
         Integer, ForeignKey("stats.id", ondelete="CASCADE"), primary_key=True
     )
+
+
+class CrossAlertRSSChannel(Base):
+    __tablename__ = "cross_alert_rss_channel"
+
+    alert_id = Column(
+        Integer, ForeignKey("alert.id", ondelete="CASCADE"), primary_key=True
+    )
+    rss_channel_id = Column(
+        Integer, ForeignKey("rss_channel.id", ondelete="CASCADE"), primary_key=True
+    )
+
+
+class CrossAlertInformationSource(Base):
+    __tablename__ = "cross_alert_information_source"
+
+    alert_id = Column(
+        Integer, ForeignKey("alert.id", ondelete="CASCADE"), primary_key=True
+    )
+    information_source_id = Column(
+        Integer,
+        ForeignKey("information_source.id", ondelete="CASCADE"),
+        primary_key=True,
+    )

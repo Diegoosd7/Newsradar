@@ -37,6 +37,8 @@ from app.db.models import (
     Alert,
     Descriptor,
     CrossAlertDescriptor,
+    CrossAlertRSSChannel,
+    CrossAlertInformationSource,
     RSSChannel,
     NewsItem,
     Notification,
@@ -131,51 +133,80 @@ def _execute_monitor(alert_id: int, db: Session) -> None:
     # ------------------------------------------------------------------
     # Paso 3: Obtener los canales RSS a monitorizar.
     #
-    # Estrategia de selección de canales (del enunciado):
-    #   "por omisión serán todos los que pertenezcan a la misma categoría"
-    #
-    # La alerta tiene categorías IPTC asociadas (CrossAlertAlertCategoryItem).
-    # Buscamos todos los RSSChannel cuya category_id coincida con alguna
-    # de esas categorías. Si la alerta no tiene categorías asignadas,
-    # monitorizamos TODOS los canales disponibles (comportamiento de
-    # fallback para alertas sin categoría explícita).
+    # Selección de canales (en orden de precedencia):
+    #   a) Si la alerta tiene rss_channels_ids guardados explícitamente,
+    #      monitorizamos SOLO esos. Permite al usuario acotar la alerta
+    #      a un subconjunto de canales (p. ej. solo el Mock RSS).
+    #   b) Si no hay rss_channels_ids pero sí information_sources_ids,
+    #      tomamos todos los canales de esas fuentes.
+    #   c) Si no hay ni canales ni fuentes explícitas, fallback al
+    #      comportamiento por defecto del enunciado: "todos los que
+    #      pertenezcan a la misma categoría que la alerta".
+    #   d) Si tampoco hay categoría, monitorizamos TODOS los canales.
     # ------------------------------------------------------------------
-    from app.db.models import CrossAlertAlertCategoryItem, AlertCategoryItem
-
-    category_codes = [
-        code
-        for (code,) in (
-            db.query(AlertCategoryItem.code)
-            .join(
-                CrossAlertAlertCategoryItem,
-                CrossAlertAlertCategoryItem.alert_category_item_id == AlertCategoryItem.id,
-            )
-            .filter(CrossAlertAlertCategoryItem.alert_id == alert_id)
+    explicit_channel_ids = [
+        cid
+        for (cid,) in (
+            db.query(CrossAlertRSSChannel.rss_channel_id)
+            .filter(CrossAlertRSSChannel.alert_id == alert_id)
             .all()
         )
     ]
 
-    if category_codes:
-        # Tomamos todos los canales cuya category esté entre las de la alerta.
-        # Category en RSSChannel referencia Category, no AlertCategoryItem —
-        # usamos el nombre como puente.
-        from app.db.models import Category
-        category_ids = [
-            cid
-            for (cid,) in (
-                db.query(Category.id)
-                .filter(Category.name.in_(category_codes))
+    explicit_source_ids = [
+        sid
+        for (sid,) in (
+            db.query(CrossAlertInformationSource.information_source_id)
+            .filter(CrossAlertInformationSource.alert_id == alert_id)
+            .all()
+        )
+    ]
+
+    if explicit_channel_ids:
+        channels = (
+            db.query(RSSChannel)
+            .filter(RSSChannel.id.in_(explicit_channel_ids))
+            .all()
+        )
+    elif explicit_source_ids:
+        channels = (
+            db.query(RSSChannel)
+            .filter(RSSChannel.information_source_id.in_(explicit_source_ids))
+            .all()
+        )
+    else:
+        from app.db.models import CrossAlertAlertCategoryItem, AlertCategoryItem
+
+        category_codes = [
+            code
+            for (code,) in (
+                db.query(AlertCategoryItem.code)
+                .join(
+                    CrossAlertAlertCategoryItem,
+                    CrossAlertAlertCategoryItem.alert_category_item_id == AlertCategoryItem.id,
+                )
+                .filter(CrossAlertAlertCategoryItem.alert_id == alert_id)
                 .all()
             )
         ]
-        channels = (
-            db.query(RSSChannel)
-            .filter(RSSChannel.category_id.in_(category_ids))
-            .all()
-        ) if category_ids else db.query(RSSChannel).all()
-    else:
-        # Sin categorías explícitas: todos los canales
-        channels = db.query(RSSChannel).all()
+
+        if category_codes:
+            from app.db.models import Category
+            category_ids = [
+                cid
+                for (cid,) in (
+                    db.query(Category.id)
+                    .filter(Category.name.in_(category_codes))
+                    .all()
+                )
+            ]
+            channels = (
+                db.query(RSSChannel)
+                .filter(RSSChannel.category_id.in_(category_ids))
+                .all()
+            ) if category_ids else db.query(RSSChannel).all()
+        else:
+            channels = db.query(RSSChannel).all()
 
     if not channels:
         logger.warning(
