@@ -50,11 +50,17 @@ const alertTitle = (alertId: number): string => {
 };
 
 const formatDateTime = (iso: string | null | undefined): string => {
-	if (!iso) return "—";
-	const d = new Date(iso);
-	if (Number.isNaN(d.getTime())) return iso;
-	const pad = (n: number) => String(n).padStart(2, "0");
-	return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} - ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    if (!iso) return "—";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return d.toLocaleString("es-ES", {
+        timeZone: "Europe/Madrid",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    }).replace(",", " -");
 };
 
 const loadAll = async () => {

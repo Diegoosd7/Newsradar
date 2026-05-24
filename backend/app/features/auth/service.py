@@ -40,7 +40,8 @@ class AuthService(CommonService):
 
         self._ensure_roles_exist(payload.role_ids)
         verification_token = token_urlsafe(32)
-        verification_token_expires_at = datetime.utcnow() + timedelta(hours=24)
+        verification_token_expires_at = datetime.utcnow() + timedelta(minutes=1)
+        # verification_token_expires_at = datetime.utcnow() + timedelta(hours=24)
 
         user = User(
             email=payload.email,

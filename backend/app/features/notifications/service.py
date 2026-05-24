@@ -1,3 +1,5 @@
+import zoneinfo
+
 from typing import List
 
 from fastapi import HTTPException
@@ -100,9 +102,11 @@ class NotificationsService(CommonService):
         self.db.commit()
         self.db.refresh(notification)
 
-        published_or_timestamp = news_item.published or notification.timestamp
+        published_or_timestamp = notification.timestamp
         source_name = self._get_source_name(news_item)
-        news_datetime_text = published_or_timestamp.strftime("%d/%m/%Y %H:%M")
+        zona = zoneinfo.ZoneInfo("Europe/Madrid")
+        published_local = published_or_timestamp.astimezone(zona)
+        news_datetime_text = published_local.strftime("%d/%m/%Y %H:%M")
 
         try:
             self.email_service.send_alert_notification_email(
