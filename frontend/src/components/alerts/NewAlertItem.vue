@@ -48,12 +48,38 @@
 
 			<div class="vertical-field">
 				<p>DESCRIPTORES</p>
-				<input
-					v-model="fields.descriptorsText"
-					type="text"
-					name="alert-descriptors"
-					placeholder="separados por coma"
-				/>
+				<div class="descriptor-input-row">
+					<input
+						v-model="fields.descriptorsText"
+						type="text"
+						name="alert-descriptors"
+						placeholder="separados por coma"
+					/>
+					<button
+						:disabled="suggestLoading || parsedDescriptors.length === 0"
+						@click="suggestKeywords"
+						class="suggest-button"
+					>
+						{{ suggestLoading ? "..." : "SUGERIR" }}
+					</button>
+				</div>
+
+				<div v-if="suggestions.length > 0" class="expanded-field suggestions-field">
+					<p>SUGERENCIAS <span class="hint">(clic para añadir)</span></p>
+					<div class="chips-row">
+						<span
+							v-for="s in suggestions"
+							:key="s"
+							class="suggestion-chip"
+							@click="addSuggestion(s)"
+						>
+							+ {{ s }}
+						</span>
+					</div>
+					<p v-if="suggestError" class="suggest-error">{{ suggestError }}</p>
+				</div>
+				<p v-if="suggestError && suggestions.length === 0" class="suggest-error">{{ suggestError }}</p>
+
 				<div class="expanded-field">
 					<p>DESCRIPTORES AÑADIDOS</p>
 					<div>
@@ -103,6 +129,10 @@ const fields = reactive({
 const loading = ref(false);
 const error = ref("");
 
+const suggestions = ref<string[]>([]);
+const suggestLoading = ref(false);
+const suggestError = ref("");
+
 const iptcCategories = computed(() =>
 	props.categories.filter((c) => /^\d{8}$/.test(c.source)),
 );
@@ -122,6 +152,48 @@ const channelsBySource = computed(() => {
 		}))
 		.filter((group) => group.channels.length > 0);
 });
+
+const suggestKeywords = async () => {
+	if (!auth.token || !auth.user) return;
+	suggestLoading.value = true;
+	suggestError.value = "";
+	suggestions.value = [];
+	try {
+		console.log("Token:", auth.token);
+		console.log("Body enviado:", JSON.stringify({ keyword: parsedDescriptors.value[0] }));
+		const res = await fetch(`/api/v1/users/suggest-keywords`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${auth.token}`,
+			},
+			body: JSON.stringify({ keyword: parsedDescriptors.value[0] }),
+		});
+		if (!res.ok) throw new Error(`Error ${res.status}`);
+		const data = await res.json();
+		// El endpoint puede devolver { suggestions: [...] } o directamente un array
+		const raw: string[] = Array.isArray(data) ? data : (data.suggestions ?? data.keywords ?? []);
+		// Filtrar los que ya están como descriptores
+		suggestions.value = raw.filter(
+			(s) => !parsedDescriptors.value.map((d) => d.toLowerCase()).includes(s.toLowerCase())
+		);
+		if (suggestions.value.length === 0) {
+			suggestError.value = "No se encontraron sugerencias nuevas.";
+		}
+	} catch (e: unknown) {
+		suggestError.value = e instanceof Error ? e.message : "Error obteniendo sugerencias.";
+	} finally {
+		suggestLoading.value = false;
+	}
+};
+
+const addSuggestion = (s: string) => {
+	const current = parsedDescriptors.value;
+	if (!current.map((d) => d.toLowerCase()).includes(s.toLowerCase())) {
+		fields.descriptorsText = [...current, s].join(", ");
+	}
+	suggestions.value = suggestions.value.filter((x) => x !== s);
+};
 
 const sendForm = async () => {
 	error.value = "";
@@ -166,6 +238,7 @@ const sendForm = async () => {
 		fields.descriptorsText = "";
 		fields.channelIds = [];
 		fields.categoryId = 0;
+		suggestions.value = [];
 		emit("created");
 	} catch (e: unknown) {
 		error.value = e instanceof Error ? e.message : "Error creando alerta.";
@@ -251,6 +324,65 @@ const sendForm = async () => {
 	background-color: rgb(215, 215, 215);
 	padding: 0.2rem 0.5rem;
 	margin: 0.2rem;
+}
+
+.descriptor-input-row {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.descriptor-input-row input {
+	flex: 1;
+}
+
+.suggest-button {
+	padding: 0.4rem 0.8rem;
+	background-color: var(--black);
+	color: white;
+	font-weight: bold;
+	font-size: 0.8rem;
+	white-space: nowrap;
+}
+
+.suggest-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.suggestions-field {
+	margin-top: 0.3rem;
+}
+
+.hint {
+	font-size: 0.75rem;
+	font-weight: normal;
+	color: #666;
+}
+
+.chips-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+
+.suggestion-chip {
+	background-color: #d7f0d7;
+	border: 1px solid #5a9e5a;
+	padding: 0.2rem 0.6rem;
+	cursor: pointer;
+	font-size: 0.85rem;
+	font-weight: normal;
+}
+
+.suggestion-chip:hover {
+	background-color: #b3e0b3;
+}
+
+.suggest-error {
+	color: rgb(150, 60, 60);
+	font-size: 0.85rem;
+	font-weight: normal;
 }
 
 p {
